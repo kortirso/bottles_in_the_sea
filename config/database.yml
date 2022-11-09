@@ -1,0 +1,22 @@
+# frozen_string_literal: true
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS') { 20 } %>
+  host: localhost
+  port: 5432
+
+development:
+  <<: *default
+  database: bottle_in_the_sea_development
+
+test:
+  <<: *default
+  database: bottle_in_the_sea_test
+
+production:
+  <<: *default
+  database: bottle_in_the_sea_production
+  username: bottle_in_the_sea
+  password: <%= ENV['BOTTLE_IN_THE_SEA_DATABASE_PASSWORD'] %>
