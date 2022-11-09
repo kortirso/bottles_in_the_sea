@@ -1,4 +1,4 @@
-# Fantasy Sports
+# Bottles in the Sea
 
 Web application for creating and maintaining fantasy leagues for different kinds of sport competitions.
 
@@ -20,17 +20,3 @@ $ que
 ```
 
 ## Process
-
-### Starting new week
-
-```ruby
-  Weeks::RefreshOperator.call(week: week)
-```
-week - coming week that must start
-
-### Fetching data for game
-
-```ruby
-  Games::FetchService.call(game: game)
-```
-game - game for fetching data
