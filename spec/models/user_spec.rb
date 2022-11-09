@@ -11,6 +11,13 @@ describe User do
 
   describe 'associations' do
     it { is_expected.to have_one(:users_session).class_name('::Users::Session').dependent(:destroy) }
+    it { is_expected.to have_many(:bottles).with_foreign_key(:user_id).dependent(:nullify) }
+
+    it {
+      is_expected.to(
+        have_many(:fish_out_bottles).class_name('Bottle').with_foreign_key(:fish_out_user_id).dependent(:nullify)
+      )
+    }
   end
 
   describe 'roles?' do

@@ -7,6 +7,9 @@ class User < ApplicationRecord
   has_secure_token :confirmation_token, length: 24
   has_secure_token :restore_token, length: 24
 
+  has_many :bottles, foreign_key: :user_id, dependent: :nullify
+  has_many :fish_out_bottles, class_name: 'Bottle', foreign_key: :fish_out_user_id, dependent: :nullify
+
   has_one :users_session, class_name: 'Users::Session', dependent: :destroy
 
   scope :not_confirmed, -> { where(confirmed_at: nil) }

@@ -261,6 +261,73 @@ CREATE TABLE public.ar_internal_metadata (
 
 
 --
+-- Name: bottles; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.bottles (
+    id bigint NOT NULL,
+    user_id bigint,
+    fish_out_user_id bigint,
+    cell_id bigint NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: bottles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.bottles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: bottles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.bottles_id_seq OWNED BY public.bottles.id;
+
+
+--
+-- Name: cells; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.cells (
+    id bigint NOT NULL,
+    q integer DEFAULT 0 NOT NULL,
+    r integer DEFAULT 0 NOT NULL,
+    surface integer DEFAULT 0 NOT NULL,
+    flows jsonb DEFAULT '{"0": 100}'::jsonb NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: cells_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.cells_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: cells_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.cells_id_seq OWNED BY public.cells.id;
+
+
+--
 -- Name: emailbutler_messages; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -425,6 +492,20 @@ ALTER SEQUENCE public.users_sessions_id_seq OWNED BY public.users_sessions.id;
 
 
 --
+-- Name: bottles id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bottles ALTER COLUMN id SET DEFAULT nextval('public.bottles_id_seq'::regclass);
+
+
+--
+-- Name: cells id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cells ALTER COLUMN id SET DEFAULT nextval('public.cells_id_seq'::regclass);
+
+
+--
 -- Name: emailbutler_messages id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -458,6 +539,22 @@ ALTER TABLE ONLY public.users_sessions ALTER COLUMN id SET DEFAULT nextval('publ
 
 ALTER TABLE ONLY public.ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: bottles bottles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.bottles
+    ADD CONSTRAINT bottles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: cells cells_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cells
+    ADD CONSTRAINT cells_pkey PRIMARY KEY (id);
 
 
 --
@@ -514,6 +611,27 @@ ALTER TABLE ONLY public.users
 
 ALTER TABLE ONLY public.users_sessions
     ADD CONSTRAINT users_sessions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: index_bottles_on_cell_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_bottles_on_cell_id ON public.bottles USING btree (cell_id);
+
+
+--
+-- Name: index_bottles_on_fish_out_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_bottles_on_fish_out_user_id ON public.bottles USING btree (fish_out_user_id);
+
+
+--
+-- Name: index_bottles_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_bottles_on_user_id ON public.bottles USING btree (user_id);
 
 
 --
@@ -600,6 +718,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20221009180348'),
 ('20221009183354'),
 ('20221026162239'),
-('20221108144820');
+('20221108144820'),
+('20221109161029'),
+('20221109165118');
 
 
