@@ -1,6 +1,7 @@
 class CreateCells < ActiveRecord::Migration[7.0]
   def change
     create_table :cells do |t|
+      t.uuid :uuid, null: false, index: { unique: true }
       t.integer :q, null: false, default: 0
       t.integer :r, null: false, default: 0
       t.integer :surface, null: false, default: 0

@@ -266,6 +266,7 @@ CREATE TABLE public.ar_internal_metadata (
 
 CREATE TABLE public.bottles (
     id bigint NOT NULL,
+    uuid uuid NOT NULL,
     user_id bigint,
     fish_out_user_id bigint,
     cell_id bigint NOT NULL,
@@ -299,6 +300,7 @@ ALTER SEQUENCE public.bottles_id_seq OWNED BY public.bottles.id;
 
 CREATE TABLE public.cells (
     id bigint NOT NULL,
+    uuid uuid NOT NULL,
     q integer DEFAULT 0 NOT NULL,
     r integer DEFAULT 0 NOT NULL,
     surface integer DEFAULT 0 NOT NULL,
@@ -632,6 +634,20 @@ CREATE INDEX index_bottles_on_fish_out_user_id ON public.bottles USING btree (fi
 --
 
 CREATE INDEX index_bottles_on_user_id ON public.bottles USING btree (user_id);
+
+
+--
+-- Name: index_bottles_on_uuid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_bottles_on_uuid ON public.bottles USING btree (uuid);
+
+
+--
+-- Name: index_cells_on_uuid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_cells_on_uuid ON public.cells USING btree (uuid);
 
 
 --
