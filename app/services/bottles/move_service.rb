@@ -25,8 +25,8 @@ module Bottles
 
     def find_destination_cell(current_cell, flow_direction)
       coordinates_change = Flows.cell_changes(flow_direction, current_cell.q)
-      q = find_new_coordinate(current_cell, coordinates_change, :q)
-      r = find_new_coordinate(current_cell, coordinates_change, :r)
+      q = find_new_q_coordinate(current_cell, coordinates_change)
+      q, r = find_new_r_coordinate(current_cell, coordinates_change, q)
 
       Cell.find_by(q: q, r: r)
     end
@@ -35,14 +35,33 @@ module Bottles
       bottle.update(cell: destination_cell)
     end
 
-    def find_new_coordinate(current_cell, coordinates_change, symbol)
-      new_coordinate = current_cell[symbol] + coordinates_change[symbol]
+    def find_new_q_coordinate(current_cell, coordinates_change)
+      new_coordinate = current_cell[:q] + coordinates_change[:q]
       # -1 coordinate is equal maximum map size coordinate from another side of map
-      return Rails.configuration.map_size[symbol] if new_coordinate.negative?
+      return map_size[:q] if new_coordinate.negative?
       # max+1 coordinate is equal 0 coordinate from another side of map
-      return 0 if new_coordinate > Rails.configuration.map_size[symbol]
+      return 0 if new_coordinate > map_size[:q]
 
       new_coordinate
+    end
+
+    def find_new_r_coordinate(current_cell, coordinates_change, column)
+      new_coordinate = current_cell[:r] + coordinates_change[:r]
+      # north pole coordinates changing
+      return [q_from_another_side(column), 0] if new_coordinate.negative?
+      # south pole coordinates changing
+      return [q_from_another_side(column), map_size[:r]] if new_coordinate > map_size[:r]
+
+      [column, new_coordinate]
+    end
+
+    # for poles column change is half of full size
+    def q_from_another_side(column)
+      column + (map_size[:q] / 2)
+    end
+
+    def map_size
+      @map_size ||= Rails.configuration.map_size
     end
   end
 end

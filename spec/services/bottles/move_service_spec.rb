@@ -53,7 +53,7 @@ describe Bottles::MoveService, type: :service do
 
     it 'updates cell for bottle' do
       expect { service_call }.to(
-        change(bottle.reload, :cell_id).to(cells.find { |cell| cell.q == 1 && cell.r == 2 }.id)
+        change(bottle.reload, :cell_id).to(cells.find { |cell| cell.q == 2 && cell.r == 0 }.id)
       )
     end
 
