@@ -4,23 +4,27 @@ module Bottles
   class MoveService
     prepend ApplicationService
 
+    FULL_POSSIBILITY = 100
+
     def call(bottle:)
       return unless bottle.can_move?
 
-      select_flow_direction(bottle.cell.flows)
-        .then { |flow_direction| find_destination_cell(bottle.cell, flow_direction) }
-        .then { |destination_cell| update_bottle(bottle, destination_cell) }
+      flow_direction = select_flow_direction(bottle.cell.flows)
+      return if flow_direction.nil?
+
+      destination_cell = find_destination_cell(bottle.cell, flow_direction[0])
+      update_bottle(bottle, destination_cell)
     end
 
     private
 
     def select_flow_direction(flows)
-      random_value = rand(flows.values.sum + 1)
+      random_value = rand(FULL_POSSIBILITY) + 1
       checked_chances = 0
       flows.find { |_, chance|
         checked_chances += chance
         random_value <= checked_chances
-      }[0]
+      }
     end
 
     def find_destination_cell(current_cell, flow_direction)

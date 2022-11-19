@@ -32,6 +32,22 @@ describe Bottles::MoveService, type: :service do
     end
   end
 
+  context 'for water cell with slow flows' do
+    let(:cell) { cells.find { |cell| cell.q == 1 && cell.r == 1 } }
+
+    before do
+      cell.update(flows: {})
+    end
+
+    it 'does not update cell for bottle' do
+      expect { service_call }.not_to change(bottle.reload, :cell_id)
+    end
+
+    it 'succeeds' do
+      expect(service_call.success?).to be_truthy
+    end
+  end
+
   context 'for water cell not on the border of map' do
     let(:cell) { cells.find { |cell| cell.q == 1 && cell.r == 1 } }
 
