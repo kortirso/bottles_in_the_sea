@@ -6,4 +6,8 @@ class Bottle < ApplicationRecord
   belongs_to :cell
   belongs_to :user, optional: true
   belongs_to :fish_out_user, class_name: 'User', optional: true
+
+  def can_move?
+    cell.water?
+  end
 end
