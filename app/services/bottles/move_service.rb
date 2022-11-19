@@ -36,7 +36,7 @@ module Bottles
     end
 
     def update_bottle(bottle, destination_cell)
-      bottle.update(cell: destination_cell)
+      bottle.update!(cell: destination_cell)
     end
 
     def find_new_q_coordinate(current_cell, coordinates_change)
