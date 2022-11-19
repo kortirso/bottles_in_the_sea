@@ -306,7 +306,8 @@ CREATE TABLE public.cells (
     surface integer DEFAULT 0 NOT NULL,
     flows jsonb DEFAULT '{"0": 100}'::jsonb NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    world_id bigint NOT NULL
 );
 
 
@@ -494,6 +495,40 @@ ALTER SEQUENCE public.users_sessions_id_seq OWNED BY public.users_sessions.id;
 
 
 --
+-- Name: worlds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.worlds (
+    id bigint NOT NULL,
+    uuid uuid NOT NULL,
+    ticks bigint DEFAULT 0 NOT NULL,
+    name character varying NOT NULL,
+    lock_version bigint,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: worlds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.worlds_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: worlds_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.worlds_id_seq OWNED BY public.worlds.id;
+
+
+--
 -- Name: bottles id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -533,6 +568,13 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 --
 
 ALTER TABLE ONLY public.users_sessions ALTER COLUMN id SET DEFAULT nextval('public.users_sessions_id_seq'::regclass);
+
+
+--
+-- Name: worlds id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.worlds ALTER COLUMN id SET DEFAULT nextval('public.worlds_id_seq'::regclass);
 
 
 --
@@ -616,6 +658,14 @@ ALTER TABLE ONLY public.users_sessions
 
 
 --
+-- Name: worlds worlds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.worlds
+    ADD CONSTRAINT worlds_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: index_bottles_on_cell_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -679,6 +729,13 @@ CREATE UNIQUE INDEX index_users_sessions_on_uuid ON public.users_sessions USING 
 
 
 --
+-- Name: index_worlds_on_uuid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_worlds_on_uuid ON public.worlds USING btree (uuid);
+
+
+--
 -- Name: que_jobs_args_gin_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -736,6 +793,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20221026162239'),
 ('20221108144820'),
 ('20221109161029'),
-('20221109165118');
+('20221109165118'),
+('20221119160315');
 
 

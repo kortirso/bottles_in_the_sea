@@ -1,6 +1,8 @@
+world = World.create(name: 'Forgotten Realms')
+
 (0..Rails.configuration.map_size[:q]).each do |q|
   (0..Rails.configuration.map_size[:r]).each do |r|
-    Cell.create(
+    world.cells.create(
       q: q,
       r: r,
       surface: q.zero? || r.zero? ? Cell::GROUND : Cell::WATER,

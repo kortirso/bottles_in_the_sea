@@ -6,6 +6,7 @@ FactoryBot.define do
     r { 0 }
     surface { Cell::WATER }
     flows { { 0 => 20, 1 => 15, 2 => 15, 3 => 20, 4 => 15, 5 => 15 } }
+    association :world
 
     trait :ground do
       surface { Cell::GROUND }
