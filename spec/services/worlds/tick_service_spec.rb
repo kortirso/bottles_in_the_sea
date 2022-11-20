@@ -9,10 +9,12 @@ describe Worlds::TickService, type: :service do
   let!(:world) { create :world }
   let!(:ground_cell) { create :cell, q: 0, r: 0, surface: Cell::GROUND, world: world }
   let!(:water_cell) { create :cell, q: 0, r: 1, surface: Cell::WATER, world: world }
-  let!(:ground_bottle) { create :bottle, cell: ground_cell }
-  let!(:water_bottle) { create :bottle, cell: water_cell }
+  let!(:ground_bottle) { create :bottle, cell: ground_cell, start_cell: ground_cell }
+  let!(:water_bottle) { create :bottle, cell: water_cell, start_cell: water_cell }
   let!(:another_world_water_cell) { create :cell, q: 0, r: 1, surface: Cell::WATER }
-  let!(:another_world_water_bottle) { create :bottle, cell: another_world_water_cell }
+  let!(:another_world_water_bottle) {
+    create :bottle, cell: another_world_water_cell, start_cell: another_world_water_cell
+  }
 
   before do
     allow(Rails).to receive(:configuration).and_return(configuration)

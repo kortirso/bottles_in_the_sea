@@ -273,7 +273,9 @@ CREATE TABLE public.bottles (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     created_at_tick bigint NOT NULL,
-    fish_out_at_tick bigint
+    fish_out_at_tick bigint,
+    start_cell_id bigint NOT NULL,
+    end_cell_id bigint
 );
 
 
@@ -868,6 +870,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20221109165118'),
 ('20221119160315'),
 ('20221119172224'),
-('20221120170849');
+('20221120170849'),
+('20221120171545');
 
 

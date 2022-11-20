@@ -4,6 +4,8 @@ class Bottle < ApplicationRecord
   include Uuidable
 
   belongs_to :cell
+  belongs_to :start_cell, class_name: 'Cell'
+  belongs_to :end_cell, class_name: 'Cell', optional: true
   belongs_to :user, optional: true
   belongs_to :fish_out_user, class_name: 'User', optional: true
 

@@ -12,7 +12,7 @@ describe Bottles::MoveService, type: :service do
       end
     end
   }
-  let(:bottle) { create :bottle, cell: cell }
+  let(:bottle) { create :bottle, cell: cell, start_cell: cell }
 
   before do
     allow(Rails).to receive(:configuration).and_return(configuration)

@@ -13,5 +13,6 @@ world = World.create(name: 'Forgotten Realms')
 end
 
 10.times do
-  Cell.water.sample.bottles.create(created_at_tick: world.ticks)
+  cell = Cell.water.sample
+  cell.bottles.create(created_at_tick: world.ticks, start_cell: cell)
 end
