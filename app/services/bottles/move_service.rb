@@ -36,7 +36,11 @@ module Bottles
     end
 
     def update_bottle(bottle, destination_cell)
-      bottle.update!(cell: destination_cell)
+      bottle.update!(
+        cell: destination_cell,
+        end_cell: destination_cell.ground? ? destination_cell : nil,
+        fish_out_at_tick: destination_cell.ground? ? bottle.cell.world.ticks : nil
+      )
     end
 
     def find_new_q_coordinate(current_cell, coordinates_change)

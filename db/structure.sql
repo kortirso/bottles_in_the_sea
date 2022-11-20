@@ -269,7 +269,7 @@ CREATE TABLE public.bottles (
     uuid uuid NOT NULL,
     user_id bigint,
     fish_out_user_id bigint,
-    cell_id bigint NOT NULL,
+    cell_id bigint,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     created_at_tick bigint NOT NULL,

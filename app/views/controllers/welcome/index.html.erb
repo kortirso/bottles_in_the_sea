@@ -1,1 +1,10 @@
-<%= react_component 'WorldMap', component_id: 'world-map-wrapper' %>
+<%= render PageWrappers::PageComponent.new do %>
+  <%= render PageWrappers::NavigationComponent.new %>
+  <%= render Views::Welcome::Index::MapStatsComponent.new(world: @world) %>
+  <%=
+    react_component 'WorldMap',
+      component_id: 'world-map-wrapper',
+      worldUuid: @world.uuid,
+      mapSize: Rails.configuration.map_size
+  %>
+<% end %>
