@@ -429,6 +429,40 @@ CREATE TABLE public.schema_migrations (
 
 
 --
+-- Name: searchers; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.searchers (
+    id bigint NOT NULL,
+    uuid uuid NOT NULL,
+    name character varying NOT NULL,
+    user_id bigint NOT NULL,
+    cell_id bigint,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: searchers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.searchers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: searchers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.searchers_id_seq OWNED BY public.searchers.id;
+
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -559,6 +593,13 @@ ALTER TABLE ONLY public.que_jobs ALTER COLUMN id SET DEFAULT nextval('public.que
 
 
 --
+-- Name: searchers id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.searchers ALTER COLUMN id SET DEFAULT nextval('public.searchers_id_seq'::regclass);
+
+
+--
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -644,6 +685,14 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
+-- Name: searchers searchers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.searchers
+    ADD CONSTRAINT searchers_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -707,6 +756,27 @@ CREATE UNIQUE INDEX index_cells_on_uuid ON public.cells USING btree (uuid);
 --
 
 CREATE UNIQUE INDEX index_emailbutler_messages_on_uuid ON public.emailbutler_messages USING btree (uuid);
+
+
+--
+-- Name: index_searchers_on_cell_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_searchers_on_cell_id ON public.searchers USING btree (cell_id);
+
+
+--
+-- Name: index_searchers_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_searchers_on_user_id ON public.searchers USING btree (user_id);
+
+
+--
+-- Name: index_searchers_on_uuid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_searchers_on_uuid ON public.searchers USING btree (uuid);
 
 
 --
@@ -797,6 +867,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20221109161029'),
 ('20221109165118'),
 ('20221119160315'),
-('20221119172224');
+('20221119172224'),
+('20221120170849');
 
 

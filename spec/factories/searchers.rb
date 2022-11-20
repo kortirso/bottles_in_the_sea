@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :bottle do
-    created_at_tick { 0 }
+  factory :searcher do
+    name { 'Searcher' }
     association :cell
+    association :user
   end
 end

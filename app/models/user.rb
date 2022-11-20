@@ -9,6 +9,7 @@ class User < ApplicationRecord
 
   has_many :bottles, foreign_key: :user_id, dependent: :nullify
   has_many :fish_out_bottles, class_name: 'Bottle', foreign_key: :fish_out_user_id, dependent: :nullify
+  has_many :searchers, dependent: :destroy
 
   has_one :users_session, class_name: 'Users::Session', dependent: :destroy
 
