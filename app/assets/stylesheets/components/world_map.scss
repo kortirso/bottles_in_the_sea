@@ -1,9 +1,17 @@
-#world-map-wrapper {
-  width: 1024px;
-  height: 600px;
-  overflow: scroll;
-  margin: 2rem auto;
+#world-map {
+  display: flex;
+  padding-top: 2rem;
 
-  #world-map-canvas {
+  #world-map-wrapper {
+    width: 64rem;
+    height: 40rem;
+    overflow: scroll;
+
+    #world-map-canvas {
+    }
+  }
+
+  #world-map-forms {
+    width: 25rem;
   }
 }

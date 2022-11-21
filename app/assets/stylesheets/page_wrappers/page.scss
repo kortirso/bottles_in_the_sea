@@ -6,4 +6,10 @@
   flex: 1;
   height: 100vh;
   overflow: hidden;
+
+  .page-content {
+    width: 100%;
+    max-width: 90rem;
+    margin: 2rem auto;
+  }
 }

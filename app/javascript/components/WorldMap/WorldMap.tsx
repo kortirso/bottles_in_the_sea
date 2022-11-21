@@ -12,42 +12,66 @@ interface WorldMapProps {
 
 export const WorldMap = ({ worldUuid, mapSize }: WorldMapProps): JSX.Element => {
   const [grounds, setGrounds] = useState([]);
+  const [mapPoint, setMapPoint] = useState();
+
+  const range = (start, end) => {
+    const length = end - start;
+    return Array.from({ length }, (_, i) => start + i);
+  }
 
   const drawWorldCells = () => {
     const canvas = document.getElementById('world-map-canvas');
     const ctx = canvas.getContext('2d');
 
-    const a = 2 * Math.PI / 6;
-    const r = 25;
+    // TODO: create hexagons generator to avoid calculations
+    const generateHexagons = (cols, rows) => {
+      const list = [];
+      [...range(0, rows)].forEach((i) => {
+        [...range(0, cols)].forEach((j) => {
+          const columnCoefficient = j * 30;
+          const evenColumn = j % 2 === 0;
 
-    let currentGroundIndex = 0;
-    const drawGrid = (cols, rows) => {
-      for (let y = r, i = 0; i < rows; y += r * Math.sin(a), i++) {
-        for (let x = r, j = 0; j < cols; x += r * (1 + Math.cos(a)), y += (-1) ** j++ * r * Math.sin(a)) {
-          let currentGround = grounds[currentGroundIndex];
-          if (currentGround?.q === j && currentGround?.r === i) {
-            currentGroundIndex += 1;
-            drawHexagon(x, y, true);
-          } else {
-            drawHexagon(x, y, false);
-          }
-        }
-      }
+          list.push({
+            row: i,
+            column: j,
+            start: columnCoefficient,
+            end: evenColumn ? Math.round(i * 34.6) : Math.round(i * 34.6 + 17.3),
+            centerX: columnCoefficient + 20,
+            centerY: evenColumn ? Math.round(i * 34.6 + 17.3) : Math.round(i * 34.6 + 34.6)
+          });
+        })
+      })
+      return list;
     }
 
-    function drawHexagon(x, y, isGround) {
-      ctx.beginPath();
-      for (var i = 0; i < 6; i++) {
-        ctx.lineTo(x + r * Math.cos(a * i), y + r * Math.sin(a * i));
+    const hexagons = generateHexagons(mapSize.q + 1, mapSize.r + 1);
+
+    let currentGroundIndex = 0;
+    let currentGround = grounds[currentGroundIndex];
+
+    hexagons.forEach(hexagon => {
+      let p = new Path2D(`M${hexagon.start + 10} ${hexagon.end} ${hexagon.start} ${hexagon.end + 17.3} ${hexagon.start + 10} ${hexagon.end + 34.6} ${hexagon.start + 30} ${hexagon.end + 34.6} ${hexagon.start + 40} ${hexagon.end + 17.3} ${hexagon.start + 30} ${hexagon.end} Z`);
+      const isGround = currentGround?.q === hexagon.column && currentGround?.r === hexagon.row
+      if (isGround) {
+        currentGroundIndex += 1;
+        currentGround = grounds[currentGroundIndex];
       }
       ctx.fillStyle = isGround ? '#4ade80' : '#38bdf8';
       ctx.strokeStyle = '#fff';
-      ctx.fill();
-      ctx.closePath();
-      ctx.stroke();
-    }
+      ctx.fill(p);
+      ctx.stroke(p);
+    });
 
-    drawGrid(mapSize.q + 1, mapSize.r + 1);
+    const isIntersect = (point, hexagon) => {
+      return Math.sqrt((point.x - hexagon.centerX) ** 2 + (point.y - hexagon.centerY) ** 2) < 17.3;
+    };
+
+    canvas.addEventListener('click', (e) => {
+      const pos = { x: e.offsetX, y: e.offsetY };
+      hexagons.find(hexagon => {
+        if (isIntersect(pos, hexagon)) setMapPoint([hexagon.column, hexagon.row])
+      });
+    });
   };
 
   useEffect(() => {
@@ -64,6 +88,17 @@ export const WorldMap = ({ worldUuid, mapSize }: WorldMapProps): JSX.Element => 
   }, [grounds]);
 
   return (
-    <canvas id="world-map-canvas" width="1024" height="550"></canvas>
+    <>
+      <div id="world-map-wrapper">
+        <canvas id="world-map-canvas" width="1024" height="550"></canvas>
+      </div>
+      <div id="world-map-forms">
+        {mapPoint ? (
+          <h2>Selected hex - {mapPoint[0]}-{mapPoint[1]}</h2>
+        ) : (
+          <h2>Select hex</h2>
+        )}
+      </div>
+    </>
   );
 };
