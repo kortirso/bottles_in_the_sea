@@ -22,8 +22,8 @@ export const WorldMap = ({ worldUuid, mapSize }: WorldMapProps): JSX.Element => 
 
     let currentGroundIndex = 0;
     const drawGrid = (cols, rows) => {
-      for (let y = r, i = 0; i < rows; y += r * Math.sin(a) + 2, i++) {
-        for (let x = r, j = 0; j < cols; x += r * (1 + Math.cos(a)) + 2, y += (-1) ** j++ * r * Math.sin(a)) {
+      for (let y = r, i = 0; i < rows; y += r * Math.sin(a), i++) {
+        for (let x = r, j = 0; j < cols; x += r * (1 + Math.cos(a)), y += (-1) ** j++ * r * Math.sin(a)) {
           let currentGround = grounds[currentGroundIndex];
           if (currentGround?.q === j && currentGround?.r === i) {
             currentGroundIndex += 1;
@@ -41,7 +41,7 @@ export const WorldMap = ({ worldUuid, mapSize }: WorldMapProps): JSX.Element => 
         ctx.lineTo(x + r * Math.cos(a * i), y + r * Math.sin(a * i));
       }
       ctx.fillStyle = isGround ? '#4ade80' : '#38bdf8';
-      ctx.strokeStyle = isGround ? '#4ade80' : '#38bdf8';
+      ctx.strokeStyle = '#fff';
       ctx.fill();
       ctx.closePath();
       ctx.stroke();
