@@ -23,8 +23,6 @@ Rails.application.routes.draw do
       post 'recovery', to: 'recovery#create'
     end
 
-    resources :cells, only: %i[index]
-
     root 'welcome#index'
   end
 end
