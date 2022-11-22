@@ -2,7 +2,14 @@ import React, { useEffect, useState } from 'react';
 
 import { hexagons } from 'data';
 
-export const WorldMap = (): JSX.Element => {
+const GROUND_COLOR = '#4ade80';
+const WATER_COLOR = '#38bdf8';
+
+interface WorldMapProps  {
+  userLogged: boolean;
+}
+
+export const WorldMap = ({ userLogged }: WorldMapProps): JSX.Element => {
   const [mapPoint, setMapPoint] = useState();
 
   const drawWorldCells = () => {
@@ -12,7 +19,7 @@ export const WorldMap = (): JSX.Element => {
     // render hexagons on the map
     hexagons.forEach(hexagon => {
       let path = new Path2D(hexagon.svg_path);
-      ctx.fillStyle = hexagon.surface === 'ground' ? '#4ade80' : '#38bdf8';
+      ctx.fillStyle = hexagon.surface === 'ground' ? GROUND_COLOR : WATER_COLOR;
       ctx.strokeStyle = '#fff';
       ctx.fill(path);
       ctx.stroke(path);
@@ -35,17 +42,19 @@ export const WorldMap = (): JSX.Element => {
     drawWorldCells();
   }, []);
 
+  const renderForm = () => {
+    if (!userLogged) return <h2>First you need to login to have opportunity to throw bottles</h2>
+    if (mapPoint) return <h2>Selected hex - {mapPoint[0]}-{mapPoint[1]}</h2>;
+    return <h2>Select hex</h2>;
+  };
+
   return (
     <>
       <div id="world-map-wrapper">
         <canvas id="world-map-canvas" width="1024" height="550"></canvas>
       </div>
       <div id="world-map-forms">
-        {mapPoint ? (
-          <h2>Selected hex - {mapPoint[0]}-{mapPoint[1]}</h2>
-        ) : (
-          <h2>Select hex</h2>
-        )}
+        {renderForm()}
       </div>
     </>
   );

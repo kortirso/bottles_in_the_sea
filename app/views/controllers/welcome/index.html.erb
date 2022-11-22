@@ -1,4 +1,4 @@
 <%= render PageWrappers::PageComponent.new do %>
   <%= render Views::Welcome::Index::MapStatsComponent.new(world: @world) %>
-  <%= react_component 'WorldMap', component_id: 'world-map' %>
+  <%= react_component 'WorldMap', component_id: 'world-map', userLogged: Current.user.present? %>
 <% end %>
