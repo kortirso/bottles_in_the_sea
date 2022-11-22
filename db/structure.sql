@@ -275,7 +275,8 @@ CREATE TABLE public.bottles (
     created_at_tick bigint NOT NULL,
     fish_out_at_tick bigint,
     start_cell_id bigint NOT NULL,
-    end_cell_id bigint
+    end_cell_id bigint,
+    "from" integer DEFAULT 0 NOT NULL
 );
 
 
@@ -871,6 +872,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20221119160315'),
 ('20221119172224'),
 ('20221120170849'),
-('20221120171545');
+('20221120171545'),
+('20221122182418');
 
 
