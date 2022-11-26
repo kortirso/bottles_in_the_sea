@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
 import { hexagons } from 'data';
+import { BottleForm, SearcherForm } from 'components';
 
 const GROUND_COLOR = '#4ade80';
 const WATER_COLOR = '#38bdf8';
 
 interface WorldMapProps  {
   userLogged: boolean;
+  worldUuid: string;
 }
 
-export const WorldMap = ({ userLogged }: WorldMapProps): JSX.Element => {
+export const WorldMap = ({ userLogged, worldUuid }: WorldMapProps): JSX.Element => {
   const [mapPoint, setMapPoint] = useState();
 
   const drawWorldCells = () => {
@@ -36,7 +38,7 @@ export const WorldMap = ({ userLogged }: WorldMapProps): JSX.Element => {
     canvas.addEventListener('click', (e) => {
       const pos = { x: e.offsetX, y: e.offsetY };
       hexagons.find(hexagon => {
-        if (isIntersect(pos, hexagon)) setMapPoint([hexagon.column, hexagon.row])
+        if (isIntersect(pos, hexagon)) setMapPoint(hexagon)
       });
     });
   };
@@ -47,7 +49,7 @@ export const WorldMap = ({ userLogged }: WorldMapProps): JSX.Element => {
 
   const renderForm = () => {
     if (!userLogged) return <h2>First you need to login to have opportunity to throw bottles</h2>
-    if (mapPoint) return <h2>Selected hex - {mapPoint[0]}-{mapPoint[1]}</h2>;
+    if (mapPoint) return <h2>Selected hex - {mapPoint.column}-{mapPoint.row}</h2>;
     return <h2>Select hex</h2>;
   };
 
@@ -59,6 +61,20 @@ export const WorldMap = ({ userLogged }: WorldMapProps): JSX.Element => {
       <div id="world-map-forms">
         {renderForm()}
       </div>
+      {userLogged && mapPoint?.surface === 'water' ? (
+        <BottleForm
+          mapPoint={mapPoint}
+          worldUuid={worldUuid}
+          onClose={() => setMapPoint(undefined)}
+        />
+      ) : null}
+      {userLogged && mapPoint?.surface === 'ground' ? (
+        <SearcherForm
+          mapPoint={mapPoint}
+          worldUuid={worldUuid}
+          onClose={() => setMapPoint(undefined)}
+        />
+      ) : null}
     </>
   );
 };

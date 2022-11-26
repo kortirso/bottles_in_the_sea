@@ -23,6 +23,8 @@ Rails.application.routes.draw do
       post 'recovery', to: 'recovery#create'
     end
 
+    resources :bottles, only: %i[create]
+
     root 'welcome#index'
   end
 end
