@@ -29,6 +29,9 @@ export const WorldMap = ({ userLogged }: WorldMapProps): JSX.Element => {
       return Math.sqrt((point.x - hexagon.center_x) ** 2 + (point.y - hexagon.center_y) ** 2) < 17.3;
     };
 
+    // do not add event listeners for unlogged users
+    if (!userLogged) return null;
+
     // catch hexagons clicks
     canvas.addEventListener('click', (e) => {
       const pos = { x: e.offsetX, y: e.offsetY };
