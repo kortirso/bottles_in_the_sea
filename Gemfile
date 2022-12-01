@@ -63,6 +63,9 @@ gem 'emailbutler'
 # A performance dashboard for Postgres
 gem 'pghero'
 
+# achievements system
+gem 'kudos'
+
 group :development, :test do
   gem 'bullet', git: 'https://github.com/flyerhzm/bullet', branch: 'master'
   gem 'rubocop', '~> 1.35', require: false
