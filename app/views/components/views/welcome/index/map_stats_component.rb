@@ -13,15 +13,19 @@ module Views
         private
 
         def total_bottles
-          @world.bottles.joins(:cell).where(cells: { surface: Cell::WATER }).size
+          @world.bottles.joins(:cell).where(cells: { surface: Cell::WATER }).count
         end
 
         def total_ground_bottles
-          @world.bottles.joins(:cell).where(cells: { surface: Cell::GROUND }).size
+          @world.bottles.joins(:cell).where(cells: { surface: Cell::GROUND }).count
         end
 
         def world_ticks
           @world.ticks
+        end
+
+        def total_searchers
+          @world.searchers.count
         end
       end
     end

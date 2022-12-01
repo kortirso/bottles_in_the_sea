@@ -49,17 +49,14 @@ export const WorldMap = ({ userLogged, worldUuid }: WorldMapProps): JSX.Element 
 
   const renderForm = () => {
     if (!userLogged) return <h2>First you need to login to have opportunity to throw bottles</h2>
-    if (mapPoint) return <h2>Selected hex - {mapPoint.column}-{mapPoint.row}</h2>;
     return <h2>Select hex</h2>;
   };
 
   return (
     <>
+      {renderForm()}
       <div id="world-map-wrapper">
-        <canvas id="world-map-canvas" width="1024" height="550"></canvas>
-      </div>
-      <div id="world-map-forms">
-        {renderForm()}
+        <canvas id="world-map-canvas" width="1440" height="550"></canvas>
       </div>
       {userLogged && mapPoint?.surface === 'water' ? (
         <BottleForm

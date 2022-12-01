@@ -5,4 +5,5 @@ class World < ApplicationRecord
 
   has_many :cells, dependent: :destroy
   has_many :bottles, through: :cells
+  has_many :searchers, through: :cells
 end

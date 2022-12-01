@@ -18,6 +18,7 @@ export const BottleForm = ({ mapPoint, worldUuid, onClose }: BottleFormProps): J
       </div>
       <div className="modal-header">
         <h2>Bottle Form</h2>
+        <p>Selected hex - {mapPoint.column}-{mapPoint.row}</p>
       </div>
       <div id="submit-button">
         <button className="button" onClick={() => submitFormRequest(mapPoint, worldUuid)}>

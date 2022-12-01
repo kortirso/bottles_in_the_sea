@@ -1,17 +1,14 @@
 #world-map {
-  display: flex;
-  padding-top: 2rem;
+  h2 {
+    margin: 1rem 0;
+  }
 
   #world-map-wrapper {
-    width: 64rem;
+    width: 90rem;
     height: 40rem;
     overflow: scroll;
 
     #world-map-canvas {
     }
-  }
-
-  #world-map-forms {
-    width: 25rem;
   }
 }

@@ -5,7 +5,7 @@ class Achievement < Kudos::Achievement
     1 => 1,
     2 => 25,
     3 => 100
-  }
+  }.freeze
 
   award_for :bottle_create do |achievements, bottle|
     user = bottle.user

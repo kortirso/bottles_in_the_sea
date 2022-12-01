@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     end
 
     resources :bottles, only: %i[create]
+    resources :searchers, only: %i[create]
 
     root 'welcome#index'
   end
