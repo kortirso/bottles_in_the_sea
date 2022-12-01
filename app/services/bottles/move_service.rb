@@ -19,7 +19,7 @@ module Bottles
     private
 
     def select_flow_direction(flows)
-      random_value = rand(FULL_POSSIBILITY) + 1
+      random_value = rand(1..FULL_POSSIBILITY)
       checked_chances = 0
       flows.find { |_, chance|
         checked_chances += chance

@@ -1,20 +1,28 @@
 # frozen_string_literal: true
 
 describe Worlds::TickService, type: :service do
-  subject(:service_call) { described_class.new(bottles_move_service: bottles_move_service).call(world: world) }
+  subject(:service_call) {
+    described_class
+      .new(bottles_move_service: bottles_move_service, searchers_activate_service: searchers_activate_service)
+      .call(world: world)
+  }
 
   let(:bottles_move_service) { double }
+  let(:searchers_activate_service) { double }
   let(:configuration) { double }
   let(:map_size) { { q: 2, r: 2 } }
   let!(:world) { create :world }
   let!(:ground_cell) { create :cell, q: 0, r: 0, surface: Cell::GROUND, world: world }
   let!(:water_cell) { create :cell, q: 0, r: 1, surface: Cell::WATER, world: world }
-  let!(:ground_bottle) { create :bottle, cell: ground_cell, start_cell: ground_cell }
+  let!(:another_ground_cell) { create :cell, q: 0, r: 2, surface: Cell::GROUND, world: world }
+  let!(:ground_bottle) { create :bottle, cell: ground_cell, start_cell: ground_cell, end_cell: ground_cell }
   let!(:water_bottle) { create :bottle, cell: water_cell, start_cell: water_cell }
   let!(:another_world_water_cell) { create :cell, q: 0, r: 1, surface: Cell::WATER }
   let!(:another_world_water_bottle) {
     create :bottle, cell: another_world_water_cell, start_cell: another_world_water_cell
   }
+  let!(:searcher) { create :searcher, cell: ground_cell }
+  let!(:another_searcher) { create :searcher, cell: another_ground_cell }
 
   before do
     allow(Rails).to receive(:configuration).and_return(configuration)
@@ -22,6 +30,7 @@ describe Worlds::TickService, type: :service do
     allow(configuration).to receive(:cell_type).and_return(:hexagon)
 
     allow(bottles_move_service).to receive(:call)
+    allow(searchers_activate_service).to receive(:call)
   end
 
   it 'calls bottles_move_service only for bottles in the water cells', :aggregate_failures do
@@ -30,6 +39,13 @@ describe Worlds::TickService, type: :service do
     expect(bottles_move_service).to have_received(:call).with(bottle: water_bottle)
     expect(bottles_move_service).not_to have_received(:call).with(bottle: ground_bottle)
     expect(bottles_move_service).not_to have_received(:call).with(bottle: another_world_water_bottle)
+  end
+
+  it 'calls searchers_activate_service only for bottles in the ground cells with bottles', :aggregate_failures do
+    service_call
+
+    expect(searchers_activate_service).to have_received(:call).with(searcher: searcher)
+    expect(searchers_activate_service).not_to have_received(:call).with(searcher: another_searcher)
   end
 
   it 'updates world' do
