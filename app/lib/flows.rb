@@ -29,9 +29,9 @@ module Flows
     '3' => { r: 0, q: -1 }
   }.freeze
 
-  def cell_changes(direction, column=nil)
-    case Rails.configuration.cell_type
-    when :square then SQUARE_FLOWS[direction]
+  def cell_changes(cell_type:, direction:, column: nil)
+    case cell_type
+    when World::SQUARE then SQUARE_FLOWS[direction]
     else HEXAGON_FLOWS[column.odd? ? :odd : :even][direction]
     end
   end

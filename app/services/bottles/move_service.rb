@@ -7,6 +7,7 @@ module Bottles
     FULL_POSSIBILITY = 100
 
     def call(bottle:)
+      @bottle = bottle
       return unless bottle.can_move?
 
       flow_direction = select_flow_direction(bottle.cell.flows)
@@ -28,7 +29,11 @@ module Bottles
     end
 
     def find_destination_cell(current_cell, flow_direction)
-      coordinates_change = Flows.cell_changes(flow_direction, current_cell.q)
+      coordinates_change = Flows.cell_changes(
+        cell_type: @bottle.cell.world,
+        direction: flow_direction,
+        column: current_cell.q
+      )
       q = find_new_q_coordinate(current_cell, coordinates_change)
       q, r = find_new_r_coordinate(current_cell, coordinates_change, q)
 
@@ -69,7 +74,7 @@ module Bottles
     end
 
     def map_size
-      @map_size ||= Rails.configuration.map_size
+      @map_size ||= @bottle.cell.world.map_size.with_indifferent_access
     end
   end
 end

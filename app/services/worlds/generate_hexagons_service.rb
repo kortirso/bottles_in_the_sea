@@ -10,7 +10,7 @@ module Worlds
     HEXAGON_HALF_HEIGHT = 17.3
 
     def initialize
-      @map_size = Rails.configuration.map_size
+      @map_size = World.first.map_size.with_indifferent_access
       @cells = World.first.cells
     end
 

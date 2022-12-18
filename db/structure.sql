@@ -652,7 +652,9 @@ CREATE TABLE public.worlds (
     name character varying NOT NULL,
     lock_version bigint,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    cell_type integer DEFAULT 0 NOT NULL,
+    map_size jsonb DEFAULT '{}'::jsonb NOT NULL
 );
 
 
@@ -1107,6 +1109,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20221120170849'),
 ('20221120171545'),
 ('20221122182418'),
-('20221130190204');
+('20221130190204'),
+('20221218183900');
 
 

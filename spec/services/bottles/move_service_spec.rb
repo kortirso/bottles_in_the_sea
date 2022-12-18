@@ -3,22 +3,16 @@
 describe Bottles::MoveService, type: :service do
   subject(:service_call) { described_class.call(bottle: bottle) }
 
-  let(:configuration) { double }
   let(:map_size) { { q: 2, r: 2 } }
+  let!(:world) { create :world, map_size: map_size, cell_type: World::HEXAGON }
   let!(:cells) {
     (0..2).flat_map do |q|
       (0..2).map do |r|
-        create :cell, q: q, r: r, surface: (q.zero? && r.zero? ? Cell::GROUND : Cell::WATER)
+        create :cell, q: q, r: r, surface: (q.zero? && r.zero? ? Cell::GROUND : Cell::WATER), world: world
       end
     end
   }
   let(:bottle) { create :bottle, cell: cell, start_cell: cell }
-
-  before do
-    allow(Rails).to receive(:configuration).and_return(configuration)
-    allow(configuration).to receive(:map_size).and_return(map_size)
-    allow(configuration).to receive(:cell_type).and_return(:hexagon)
-  end
 
   context 'for ground cell' do
     let(:cell) { cells.find { |cell| cell.q.zero? && cell.r.zero? } }
