@@ -7,8 +7,8 @@ Kudos::Achievement.create(award_name: 'bottle_create', points: 100, rank: 3, kud
 
 world = World.create(name: 'Forgotten Realms', cell_type: World::HEXAGON, map_size: { q: 20, r: 10 })
 
-(0..Rails.configuration.map_size[:q]).each do |q|
-  (0..Rails.configuration.map_size[:r]).each do |r|
+(0..world.map_size['q']).each do |q|
+  (0..world.map_size['r']).each do |r|
     world.cells.create(
       q: q,
       r: r,
