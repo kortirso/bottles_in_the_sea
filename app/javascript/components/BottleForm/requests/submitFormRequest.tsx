@@ -1,28 +1,26 @@
 import { csrfToken } from 'helpers';
 import { apiRequest } from 'requests/helpers/apiRequest';
 
-export const submitFormRequest = async (mapPoint, worldUuid: string) => {
-  const bottlePayload = {
-    form: 'bordeaux'
-  };
+export const submitFormRequest = async (mapPoint, worldUuid: string, bottleForm?: string, bottleFile) => {
+  if (!bottleForm) return; // TODO: add errors rendering
+  if (!bottleFile) return; // TODO: add errors rendering
 
-  const cellPayload = {
-    column: mapPoint.column,
-    row: mapPoint.row
-  };
+  const formData = new FormData();
+  formData.append('bottle[files][]', bottleFile);
+  formData.append('bottle[form]', bottleForm);
+  formData.append('cell[column]', mapPoint.column);
+  formData.append('cell[row]', mapPoint.row);
+  formData.append('world_uuid', worldUuid)
 
   const requestOptions = {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-TOKEN': csrfToken(),
-    },
-    body: JSON.stringify({ bottle: bottlePayload, cell: cellPayload, world_uuid: worldUuid }),
+    headers: { 'X-CSRF-TOKEN': csrfToken() },
+    body: formData
   };
 
   const submitResult = await apiRequest({
-    url: `/bottles.json`,
-    options: requestOptions,
+    url: '/bottles.json',
+    options: requestOptions
   });
 
   if (submitResult.redirect_path) {

@@ -23,6 +23,9 @@ Rails.application.routes.draw do
       post 'recovery', to: 'recovery#create'
     end
 
+    resources :worlds, only: %i[] do
+      resources :bottle_forms, only: %i[index], module: 'worlds'
+    end
     resources :bottles, only: %i[create]
     resources :searchers, only: %i[create]
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { Modal } from 'components/atoms';
 
@@ -11,7 +11,6 @@ interface SearcherFormProps  {
 }
 
 export const SearcherForm = ({ mapPoint, worldUuid, onClose }: SearcherFormProps): JSX.Element => {
-
   return (
     <Modal show={!!mapPoint}>
       <div className="button small modal-close" onClick={onClose}>

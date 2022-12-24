@@ -17,7 +17,7 @@ class BottlesController < ApplicationController
   private
 
   def bottle_params
-    params.require(:bottle).permit(:form)
+    params.require(:bottle).permit(:form, files: [])
   end
 
   def cell_params
