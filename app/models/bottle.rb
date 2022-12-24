@@ -12,6 +12,8 @@ class Bottle < ApplicationRecord
   belongs_to :user, optional: true
   belongs_to :fish_out_user, class_name: 'User', optional: true
 
+  has_many_attached :files
+
   enum form: { BORDEAUX => 0, BURGUNDY => 1 }
 
   def can_move?
