@@ -4,13 +4,13 @@ describe Worlds::TickService, type: :service do
   subject(:service_call) {
     described_class
       .new(bottles_move_service: bottles_move_service, searchers_activate_service: searchers_activate_service)
-      .call(world: world)
+      .call(world_id: world.id)
   }
 
   let(:bottles_move_service) { double }
   let(:searchers_activate_service) { double }
   let(:configuration) { double }
-  let!(:world) { create :world, map_size: { q: 2, r: 2 } }
+  let!(:world) { create :world, map_size: { q: 1, r: 1 } }
   let!(:ground_cell) { create :cell, q: 0, r: 0, surface: Cell::GROUND, world: world }
   let!(:water_cell) { create :cell, q: 0, r: 1, surface: Cell::WATER, world: world }
   let!(:another_ground_cell) { create :cell, q: 0, r: 2, surface: Cell::GROUND, world: world }
@@ -26,6 +26,10 @@ describe Worlds::TickService, type: :service do
   before do
     allow(bottles_move_service).to receive(:call)
     allow(searchers_activate_service).to receive(:call)
+
+    [[1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]].each do |cell|
+      create :cell, q: cell[0], r: cell[1], surface: Cell::WATER, world: world
+    end
   end
 
   it 'calls bottles_move_service only for bottles in the water cells', :aggregate_failures do
@@ -44,7 +48,9 @@ describe Worlds::TickService, type: :service do
   end
 
   it 'updates world' do
-    expect { service_call }.to change(world, :ticks).from(0).to(1)
+    service_call
+
+    expect(world.reload.ticks).to eq 1
   end
 
   it 'succeeds' do
@@ -52,21 +58,22 @@ describe Worlds::TickService, type: :service do
   end
 
   context 'for parallel service calls' do
-    # TODO: update test for valid testing of locking
+    before do
+      Cell.update_all(surface: Cell::WATER)
+    end
+
     it 'calls bottles_move_service only for bottles in the water cells', :aggregate_failures do
       Array.new(2) {
         Thread.new {
           described_class.new(
             bottles_move_service: bottles_move_service,
             searchers_activate_service: searchers_activate_service
-          ).call(world: world)
+          ).call(world_id: world.id)
         }
       }
       .each(&:join)
 
       expect(bottles_move_service).to have_received(:call).exactly(2)
-      expect(bottles_move_service).not_to have_received(:call).with(bottle: ground_bottle)
-      expect(bottles_move_service).not_to have_received(:call).with(bottle: another_world_water_bottle)
       expect(world.reload.ticks).to eq 2
     end
   end

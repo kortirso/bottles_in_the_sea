@@ -12,16 +12,15 @@ module Worlds
       @searchers_activate_service = searchers_activate_service
     end
 
-    def call(world:)
-      @world = world
-
+    def call(world_id:)
+      @world = World.find(world_id)
       ActiveRecord::Base.transaction do
         update_world_tick
         move_bottles
         activate_searchers
       end
     rescue ::ActiveRecord::StaleObjectError => _e
-      Worlds::TickService.call(world: @world)
+      Worlds::TickService.call(world_id: @world.id)
     end
 
     private
@@ -39,7 +38,6 @@ module Worlds
 
     def activate_searchers
       cells_with_bottles = @world.bottles.where.not(end_cell: nil).pluck(:end_cell_id)
-
       Searcher
         .where(cell_id: cells_with_bottles)
         .find_each { |searcher| @searchers_activate_service.call(searcher: searcher) }
