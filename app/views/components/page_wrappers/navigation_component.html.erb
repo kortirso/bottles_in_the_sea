@@ -2,6 +2,9 @@
   <div>
     <%= link_to t('components.page_wrappers.page_component.home'), root_path %>
     <% if Current.user %>
+      <% if Current.user.admin? %>
+        <%= link_to t('components.page_wrappers.page_component.admin'), admin_path %>
+      <% end %>
       <%= link_to t('components.page_wrappers.page_component.searchers'), profile_searchers_path %>
       <%= link_to t('components.page_wrappers.page_component.bottles'), profile_bottles_path %>
       <%= link_to t('components.page_wrappers.page_component.achievements'), profile_achievements_path %>

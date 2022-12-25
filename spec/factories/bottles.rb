@@ -5,5 +5,9 @@ FactoryBot.define do
     created_at_tick { 0 }
     association :cell
     association :start_cell, factory: :cell
+
+    trait :moderated do
+      moderated_at { DateTime.now }
+    end
   end
 end

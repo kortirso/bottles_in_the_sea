@@ -26,6 +26,11 @@
 
       td {
         padding: .5rem 1rem;
+
+        &.actions {
+          display: flex;
+          justify-content: end
+        }
       }
     }
   }

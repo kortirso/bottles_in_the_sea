@@ -31,6 +31,7 @@ module Worlds
 
     def move_bottles
       Bottle
+        .moderated
         .joins(:cell)
         .where(cells: { surface: Cell::WATER, world_id: @world.id })
         .find_each { |bottle| @bottles_move_service.call(bottle: bottle) }

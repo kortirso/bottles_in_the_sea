@@ -5,6 +5,14 @@ Rails.application.routes.draw do
   mount PgHero::Engine, at: 'pghero'
 
   localized do
+    namespace :admin do
+      get '', to: 'welcome#index'
+
+      resources :bottles, only: %i[index destroy] do
+        post :approve, on: :member
+      end
+    end
+
     namespace :users do
       get 'sign_up', to: 'registrations#new'
       post 'sign_up', to: 'registrations#create'

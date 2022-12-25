@@ -14,11 +14,11 @@ describe Worlds::TickService, type: :service do
   let!(:ground_cell) { create :cell, q: 0, r: 0, surface: Cell::GROUND, world: world }
   let!(:water_cell) { create :cell, q: 0, r: 1, surface: Cell::WATER, world: world }
   let!(:another_ground_cell) { create :cell, q: 0, r: 2, surface: Cell::GROUND, world: world }
-  let!(:ground_bottle) { create :bottle, cell: ground_cell, start_cell: ground_cell, end_cell: ground_cell }
-  let!(:water_bottle) { create :bottle, cell: water_cell, start_cell: water_cell }
+  let!(:ground_bottle) { create :bottle, :moderated, cell: ground_cell, start_cell: ground_cell, end_cell: ground_cell }
+  let!(:water_bottle) { create :bottle, :moderated, cell: water_cell, start_cell: water_cell }
   let!(:another_world_water_cell) { create :cell, q: 0, r: 1, surface: Cell::WATER }
   let!(:another_world_water_bottle) {
-    create :bottle, cell: another_world_water_cell, start_cell: another_world_water_cell
+    create :bottle, :moderated, cell: another_world_water_cell, start_cell: another_world_water_cell
   }
   let!(:searcher) { create :searcher, cell: ground_cell }
   let!(:another_searcher) { create :searcher, cell: another_ground_cell }

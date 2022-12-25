@@ -59,6 +59,7 @@ gem 'foreman'
 
 # email tracking system
 gem 'emailbutler'
+gem 'pagy', '> 5.0'
 
 # A performance dashboard for Postgres
 gem 'pghero'

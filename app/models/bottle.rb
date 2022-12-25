@@ -14,9 +14,21 @@ class Bottle < ApplicationRecord
 
   has_many_attached :files
 
+  scope :moderated, -> { where.not(moderated_at: nil) }
+
   enum form: { BORDEAUX => 0, BURGUNDY => 1 }
 
   def can_move?
     cell.water?
+  end
+
+  def moderated?
+    !moderated_at.nil?
+  end
+
+  def sailing_duration
+    return fish_out_at_tick - created_at_tick if fish_out_at_tick
+
+    start_cell.world.ticks - created_at_tick
   end
 end

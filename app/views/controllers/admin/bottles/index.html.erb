@@ -1,0 +1,37 @@
+<div class="flex flex-row justify-between items-center">
+  <h1><%= t('views.admin.bottles.index.header') %></h1>
+</div>
+<%== pagy_nav(@pagy) %>
+<table class="profile-table" cellSpacing="0">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Created tick</th>
+      <th>Sailing time</th>
+      <th>Current cell</th>
+      <th>Moderated</th>
+      <th>Files</th>
+      <th class="actions">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @bottles.each do |bottle| %>
+      <tr>
+        <td><%= bottle.id %></td>
+        <td><%= bottle.created_at_tick %></td>
+        <td><%= bottle.sailing_duration %></td>
+        <td><%= bottle.cell.q %>:<%= bottle.cell.r %></td>
+        <td><%= bottle.moderated? %></td>
+        <td class="file-preview">
+          <% bottle.files.each do |file| %>
+            <%= image_tag file %>
+          <% end %>
+        </td>
+        <td class="actions">
+          <%= button_to t('views.admin.bottles.index.approve'), approve_admin_bottle_path(bottle.id), class: 'button small' %>
+          <%= button_to t('views.admin.bottles.index.destroy'), admin_bottle_path(bottle.id), class: 'button small', method: :delete %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
