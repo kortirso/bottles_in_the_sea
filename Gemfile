@@ -66,12 +66,16 @@ gem 'pghero'
 # achievements system
 gem 'kudos'
 
+# event store
+gem 'rails_event_store'
+
 group :development, :test do
   gem 'bullet', git: 'https://github.com/flyerhzm/bullet', branch: 'master'
   gem 'rubocop', '~> 1.35', require: false
   gem 'rubocop-performance', '~> 1.14', require: false
   gem 'rubocop-rails', '~> 2.15', require: false
   gem 'rubocop-rspec', '~> 2.12', require: false
+  gem 'ruby_event_store-rspec'
 end
 
 group :development do

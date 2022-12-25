@@ -3,18 +3,20 @@
 module Bottles
   class CreateService
     prepend ApplicationService
+    include Publishable
 
     def call(world_uuid:, params:, cell_params:)
       return if find_world(world_uuid) && failure?
       return if find_cell(cell_params) && failure?
 
-      Bottle.create(
+      @result = Bottle.create(
         params.merge(
           created_at_tick: @world.ticks,
           cell: @cell,
           start_cell: @cell
         )
       )
+      publish_created_bottle
     end
 
     private
@@ -27,6 +29,10 @@ module Bottles
     def find_cell(cell_params)
       @cell = @world.cells.water.find_by(q: cell_params[:column].to_i, r: cell_params[:row].to_i)
       fail!('Cell is not found') unless @cell
+    end
+
+    def publish_created_bottle
+      publish_event(event: Bottles::CreatedEvent, data: { bottle_uuid: @result.uuid })
     end
   end
 end

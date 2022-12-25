@@ -3,6 +3,7 @@
 describe Bottles::CreateService, type: :service do
   subject(:service_call) { described_class.call(world_uuid: world_uuid, params: params, cell_params: cell_params) }
 
+  let(:event_store) { Rails.configuration.event_store }
   let!(:user) { create :user }
   let!(:world) { create :world }
 
@@ -13,6 +14,10 @@ describe Bottles::CreateService, type: :service do
   before do
     create :cell, world: world, surface: Cell::WATER, q: 0, r: 0
     create :cell, world: world, surface: Cell::GROUND, q: 0, r: 1
+  end
+
+  it 'subscribes for events' do
+    expect(Bottles::CreateJob).to have_subscribed_to_events(Bottles::CreatedEvent).in(event_store)
   end
 
   context 'for unexisting world' do
@@ -42,6 +47,14 @@ describe Bottles::CreateService, type: :service do
   context 'for water cell' do
     it 'creates new bottle' do
       expect { service_call }.to change(user.bottles, :count).by(1)
+    end
+
+    it 'publishes Bottles::CreatedEvent' do
+      service_call
+
+      expect(event_store).to(
+        have_published(an_event(Bottles::CreatedEvent).with_data(bottle_uuid: Bottle.last.uuid))
+      )
     end
 
     it 'succeeds' do
