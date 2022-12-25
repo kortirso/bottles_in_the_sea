@@ -1,0 +1,25 @@
+<%= render PageWrappers::PageComponent.new do %>
+  <h2>Achievements</h2>
+  <% if @achievements.load.size.positive? %>
+    <table class="profile-table" cellSpacing="0">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Points</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @achievements.each do |achievement| %>
+          <tr>
+            <td><%= localized_value(achievement.title) %></td>
+            <td><%= achievement.points %></td>
+            <td><%= localized_value(achievement.description) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>You don't have any achievements yet.</p>
+  <% end %>
+<% end %>

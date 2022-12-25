@@ -1,6 +1,11 @@
 <header id="page-navigation">
   <div>
     <%= link_to t('components.page_wrappers.page_component.home'), root_path %>
+    <% if Current.user %>
+      <%= link_to t('components.page_wrappers.page_component.searchers'), profile_searchers_path %>
+      <%= link_to t('components.page_wrappers.page_component.bottles'), profile_bottles_path %>
+      <%= link_to t('components.page_wrappers.page_component.achievements'), profile_achievements_path %>
+    <% end %>
   </div>
   <div>
     <% I18n.available_locales.each do |locale| %>

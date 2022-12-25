@@ -23,6 +23,12 @@ Rails.application.routes.draw do
       post 'recovery', to: 'recovery#create'
     end
 
+    namespace :profile do
+      resources :searchers, only: %i[index]
+      resources :bottles, only: %i[index]
+      resources :achievements, only: %i[index]
+    end
+
     resources :worlds, only: %i[] do
       resources :bottle_forms, only: %i[index], module: 'worlds'
     end
