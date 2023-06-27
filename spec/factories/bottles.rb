@@ -3,8 +3,8 @@
 FactoryBot.define do
   factory :bottle do
     created_at_tick { 0 }
-    association :cell
-    association :start_cell, factory: :cell
+    cell
+    start_cell factory: %i[cell]
 
     trait :moderated do
       moderated_at { DateTime.now }

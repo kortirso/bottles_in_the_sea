@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :searcher do
     name { 'Searcher' }
-    association :cell
-    association :user
+    cell
+    user
   end
 end

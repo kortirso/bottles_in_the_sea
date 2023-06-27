@@ -2,6 +2,7 @@ require:
   - rubocop-performance
   - rubocop-rspec
   - rubocop-rails
+  - rubocop-factory_bot
 
 AllCops:
   Exclude:
@@ -225,7 +226,7 @@ RSpec/InstanceVariable:
 RSpec/PredicateMatcher:
   Enabled: false
 
-RSpec/FactoryBot/ConsistentParenthesesStyle:
+FactoryBot/ConsistentParenthesesStyle:
   Enabled: false
 
 Rails/InverseOf:
