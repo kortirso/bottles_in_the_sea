@@ -22,7 +22,7 @@ gem 'sassc-rails'
 gem 'sprockets', git: 'https://github.com/rails/sprockets', branch: 'main'
 
 # A framework for building view components
-gem 'view_component', '~> 2.75', require: 'view_component/engine'
+gem 'view_component', '~> 3.0', require: 'view_component/engine'
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem 'bcrypt', '~> 3.1'
@@ -71,7 +71,7 @@ gem 'kudos'
 gem 'rails_event_store'
 
 group :development, :test do
-  gem 'bullet', git: 'https://github.com/flyerhzm/bullet', branch: 'master'
+  gem 'bullet', git: 'https://github.com/flyerhzm/bullet', branch: 'main'
   gem 'rubocop', '~> 1.35', require: false
   gem 'rubocop-performance', '~> 1.14', require: false
   gem 'rubocop-rails', '~> 2.15', require: false
