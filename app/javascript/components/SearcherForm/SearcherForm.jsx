@@ -1,16 +1,10 @@
 import React from 'react';
 
-import { Modal } from 'components/atoms';
+import { Modal } from '../../components/atoms';
 
 import { submitFormRequest } from './requests/submitFormRequest';
 
-interface SearcherFormProps  {
-  mapPoint: boolean;
-  worldUuid: string;
-  onClose: () => void;
-}
-
-export const SearcherForm = ({ mapPoint, worldUuid, onClose }: SearcherFormProps): JSX.Element => {
+export const SearcherForm = ({ mapPoint, worldUuid, onClose }) => {
   return (
     <Modal show={!!mapPoint}>
       <div className="button small modal-close" onClick={onClose}>

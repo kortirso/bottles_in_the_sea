@@ -6,7 +6,10 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.2.0'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
-gem 'rails', '~> 7.0'
+gem 'rack', '~> 3.0'
+gem 'rack-session', '~> 2.0'
+gem 'rackup', '~> 2.1'
+gem 'rails', '~> 7.1'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.4'
@@ -17,9 +20,10 @@ gem 'puma', '~> 6.0'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
 
-# The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
-gem 'sassc-rails'
-gem 'sprockets', git: 'https://github.com/rails/sprockets', branch: 'main'
+# Js and css
+gem 'jsbundling-rails', '~> 1.0'
+gem 'sprockets-rails'
+gem 'tailwindcss-rails'
 
 # A framework for building view components
 gem 'view_component', '~> 3.0', require: 'view_component/engine'
@@ -33,7 +37,9 @@ gem 'jwt', '~> 2.5'
 # authorization
 gem 'action_policy', '~> 0.6'
 
-# validations
+# dry-rb system
+gem 'dry-auto_inject', '~> 1.0'
+gem 'dry-container', '~> 0.11.0'
 gem 'dry-validation', '~> 1.10'
 
 # Catch unsafe migrations in development
@@ -42,24 +48,18 @@ gem 'strong_migrations', '~> 1.4'
 # api serializer
 gem 'jsonapi-serializer', '2.2.0'
 
-# translating
-gem 'route_translator', git: 'https://github.com/enriclluelles/route_translator', branch: 'master'
-
 # active jobs adapter
-gem 'que', '~> 2.2.0'
+gem 'que', '~> 2.3'
 
 # Pretty print
 gem 'awesome_print'
-
-# jsbundling
-gem 'jsbundling-rails', '~> 1.0'
 
 # running application
 gem 'foreman'
 
 # email tracking system
 gem 'emailbutler'
-gem 'pagy', '> 5.0'
+gem 'pagy', '> 6.0'
 
 # A performance dashboard for Postgres
 gem 'pghero'
@@ -67,8 +67,8 @@ gem 'pghero'
 # achievements system
 gem 'kudos'
 
-# event store
-gem 'rails_event_store'
+# translating
+gem 'i18n-tasks', '~> 1.0.13'
 
 group :development, :test do
   gem 'bullet', git: 'https://github.com/flyerhzm/bullet', branch: 'main'
@@ -76,7 +76,6 @@ group :development, :test do
   gem 'rubocop-performance', '~> 1.14', require: false
   gem 'rubocop-rails', '~> 2.15', require: false
   gem 'rubocop-rspec', '~> 2.12', require: false
-  gem 'ruby_event_store-rspec'
 end
 
 group :development do
@@ -89,10 +88,10 @@ end
 
 group :test do
   gem 'database_cleaner', '~> 2.0'
-  gem 'factory_bot_rails', '6.2.0'
+  gem 'factory_bot_rails', '~> 6.4'
   gem 'json_spec', '1.1.5'
   gem 'rails-controller-testing', '1.0.5'
   gem 'rspec-rails', '~> 6.0'
-  gem 'shoulda-matchers', '~> 5.0'
+  gem 'shoulda-matchers', '~> 6.0'
   gem 'simplecov', require: false
 end

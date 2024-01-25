@@ -1,12 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-interface ModalProps {
-  children: React.ReactNode;
-  show: boolean;
-}
-
-export const Modal = ({ show, children }: ModalProps): JSX.Element => {
+export const Modal = ({ show, children }) => {
   const modalContent = show ? (
     <div className="modal-container flex items-center justify-center">
       <div className="modal-content">{children}</div>
@@ -16,7 +11,7 @@ export const Modal = ({ show, children }: ModalProps): JSX.Element => {
   if (modalContent) {
     return ReactDOM.createPortal(
       modalContent,
-      window.document.getElementById('modal-root') as HTMLElement,
+      window.document.getElementById('modal-root'),
     );
   } else {
     return <></>;

@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
-import { hexagons } from 'data';
-import { BottleForm, SearcherForm } from 'components';
+import { hexagons } from '../../data';
+import { BottleForm, SearcherForm } from '../../components';
 
 const GROUND_COLOR = '#4ade80';
 const WATER_COLOR = '#38bdf8';
 
-interface WorldMapProps  {
-  userLogged: boolean;
-  worldUuid: string;
-}
-
-export const WorldMap = ({ userLogged, worldUuid }: WorldMapProps): JSX.Element => {
+export const WorldMap = ({ userLogged, worldUuid }) => {
   const [mapPoint, setMapPoint] = useState();
 
   const drawWorldCells = () => {

@@ -1,19 +1,9 @@
 import React, { useState } from 'react';
 
-import type { KeyValue } from 'entities';
+export const Dropdown = ({ title, items, placeholder, onSelect, selectedItem }) => {
+  const [isOpen, setIsOpen] = useState(false);
 
-interface DropdownProps {
-  title: string;
-  items: KeyValue;
-  placeholder?: string;
-  onSelect: (value: string) => void;
-  selectedItem?: string;
-}
-
-export const Dropdown = ({ title, items, placeholder, onSelect, selectedItem }: DropdownProps): JSX.Element => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  const selectValue = (value: string) => {
+  const selectValue = (value) => {
     onSelect(value);
     setIsOpen(false);
   };

@@ -3,7 +3,6 @@
 module Bottles
   class CreateService
     prepend ApplicationService
-    include Publishable
 
     def call(world_uuid:, params:, cell_params:)
       return if find_world(world_uuid) && failure?
@@ -32,7 +31,7 @@ module Bottles
     end
 
     def publish_created_bottle
-      publish_event(event: Bottles::CreatedEvent, data: { bottle_uuid: @result.uuid })
+      Bottles::CreateJob.perform_later(uuid: @result.uuid)
     end
   end
 end

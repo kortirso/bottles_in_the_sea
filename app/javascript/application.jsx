@@ -2,8 +2,7 @@ import React from 'react';
 import * as ReactDOMClient from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-import { WorldMap } from 'components';
-import type { ComponentType } from 'entities';
+import { WorldMap } from './components';
 
 const components = { WorldMap };
 const queryClient = new QueryClient();
@@ -11,9 +10,9 @@ const queryClient = new QueryClient();
 document.addEventListener('DOMContentLoaded', () => {
   const mountPoints = document.querySelectorAll('[data-react-component]');
   mountPoints.forEach((mountPoint) => {
-    const dataset = (mountPoint as HTMLElement).dataset;
-    const componentName = dataset['reactComponent'] as ComponentType;
-    const Component = components[componentName!];
+    const dataset = mountPoint.dataset;
+    const componentName = dataset['reactComponent'];
+    const Component = components[componentName];
 
     if (Component) {
       const props = dataset['props'] ? JSON.parse(dataset['props']) : {};

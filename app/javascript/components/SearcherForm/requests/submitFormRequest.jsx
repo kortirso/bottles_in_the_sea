@@ -1,7 +1,7 @@
-import { csrfToken } from 'helpers';
-import { apiRequest } from 'requests/helpers/apiRequest';
+import { csrfToken } from '../../../helpers';
+import { apiRequest } from '../../../requests/helpers/apiRequest';
 
-export const submitFormRequest = async (mapPoint, worldUuid: string) => {
+export const submitFormRequest = async (mapPoint, worldUuid) => {
   const searcherPayload = {
     name: 'Searcher'
   };
@@ -28,6 +28,6 @@ export const submitFormRequest = async (mapPoint, worldUuid: string) => {
   if (submitResult.redirect_path) {
     window.location = submitResult.redirect_path;
   } else {
-    submitResult.errors.forEach((error: string) => console.log(error));
+    submitResult.errors.forEach((error) => console.log(error));
   }
 };

@@ -375,7 +375,7 @@ CREATE TABLE public.bottles (
     fish_out_at_tick bigint,
     start_cell_id bigint NOT NULL,
     end_cell_id bigint,
-    "from" integer DEFAULT 0 NOT NULL,
+    form integer DEFAULT 0 NOT NULL,
     moderated_at timestamp(6) without time zone
 );
 
@@ -471,72 +471,6 @@ CREATE SEQUENCE public.emailbutler_messages_id_seq
 --
 
 ALTER SEQUENCE public.emailbutler_messages_id_seq OWNED BY public.emailbutler_messages.id;
-
-
---
--- Name: event_store_events; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.event_store_events (
-    id bigint NOT NULL,
-    event_id uuid NOT NULL,
-    event_type character varying NOT NULL,
-    metadata bytea,
-    data bytea NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    valid_at timestamp without time zone
-);
-
-
---
--- Name: event_store_events_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.event_store_events_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: event_store_events_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.event_store_events_id_seq OWNED BY public.event_store_events.id;
-
-
---
--- Name: event_store_events_in_streams; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.event_store_events_in_streams (
-    id bigint NOT NULL,
-    stream character varying NOT NULL,
-    "position" integer,
-    event_id uuid NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: event_store_events_in_streams_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.event_store_events_in_streams_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: event_store_events_in_streams_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.event_store_events_in_streams_id_seq OWNED BY public.event_store_events_in_streams.id;
 
 
 --
@@ -886,20 +820,6 @@ ALTER TABLE ONLY public.emailbutler_messages ALTER COLUMN id SET DEFAULT nextval
 
 
 --
--- Name: event_store_events id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.event_store_events ALTER COLUMN id SET DEFAULT nextval('public.event_store_events_id_seq'::regclass);
-
-
---
--- Name: event_store_events_in_streams id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.event_store_events_in_streams ALTER COLUMN id SET DEFAULT nextval('public.event_store_events_in_streams_id_seq'::regclass);
-
-
---
 -- Name: kudos_achievement_groups id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1009,22 +929,6 @@ ALTER TABLE ONLY public.cells
 
 ALTER TABLE ONLY public.emailbutler_messages
     ADD CONSTRAINT emailbutler_messages_pkey PRIMARY KEY (id);
-
-
---
--- Name: event_store_events_in_streams event_store_events_in_streams_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.event_store_events_in_streams
-    ADD CONSTRAINT event_store_events_in_streams_pkey PRIMARY KEY (id);
-
-
---
--- Name: event_store_events event_store_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.event_store_events
-    ADD CONSTRAINT event_store_events_pkey PRIMARY KEY (id);
 
 
 --
@@ -1183,55 +1087,6 @@ CREATE UNIQUE INDEX index_cells_on_uuid ON public.cells USING btree (uuid);
 --
 
 CREATE UNIQUE INDEX index_emailbutler_messages_on_uuid ON public.emailbutler_messages USING btree (uuid);
-
-
---
--- Name: index_event_store_events_in_streams_on_created_at; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_event_store_events_in_streams_on_created_at ON public.event_store_events_in_streams USING btree (created_at);
-
-
---
--- Name: index_event_store_events_in_streams_on_stream_and_event_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_event_store_events_in_streams_on_stream_and_event_id ON public.event_store_events_in_streams USING btree (stream, event_id);
-
-
---
--- Name: index_event_store_events_in_streams_on_stream_and_position; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_event_store_events_in_streams_on_stream_and_position ON public.event_store_events_in_streams USING btree (stream, "position");
-
-
---
--- Name: index_event_store_events_on_created_at; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_event_store_events_on_created_at ON public.event_store_events USING btree (created_at);
-
-
---
--- Name: index_event_store_events_on_event_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_event_store_events_on_event_id ON public.event_store_events USING btree (event_id);
-
-
---
--- Name: index_event_store_events_on_event_type; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_event_store_events_on_event_type ON public.event_store_events USING btree (event_type);
-
-
---
--- Name: index_event_store_events_on_valid_at; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_event_store_events_on_valid_at ON public.event_store_events USING btree (valid_at);
 
 
 --
@@ -1428,25 +1283,23 @@ ALTER TABLE ONLY public.kudos_achievements
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
-('20211101190000'),
-('20211101190250'),
-('20211103182015'),
-('20220817183402'),
-('20221009180348'),
-('20221009183354'),
-('20221026162239'),
-('20221108144820'),
-('20221109161029'),
-('20221109165118'),
-('20221119160315'),
-('20221119172224'),
-('20221120170849'),
-('20221120171545'),
-('20221122182418'),
-('20221130190204'),
-('20221218183900'),
+('20221225163729'),
 ('20221224184204'),
-('20221225133730'),
-('20221225163729');
-
+('20221218183900'),
+('20221130190204'),
+('20221122182418'),
+('20221120171545'),
+('20221120170849'),
+('20221119172224'),
+('20221119160315'),
+('20221109165118'),
+('20221109161029'),
+('20221108144820'),
+('20221026162239'),
+('20221009183354'),
+('20221009180348'),
+('20220817183402'),
+('20211103182015'),
+('20211101190250'),
+('20211101190000');
 

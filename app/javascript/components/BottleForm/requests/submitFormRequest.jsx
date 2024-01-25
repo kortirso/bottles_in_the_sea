@@ -1,7 +1,7 @@
-import { csrfToken } from 'helpers';
-import { apiRequest } from 'requests/helpers/apiRequest';
+import { csrfToken } from '../../../helpers';
+import { apiRequest } from '../../../requests/helpers/apiRequest';
 
-export const submitFormRequest = async (mapPoint, worldUuid: string, bottleForm?: string, bottleFile) => {
+export const submitFormRequest = async (mapPoint, worldUuid, bottleForm, bottleFile) => {
   if (!bottleForm) return; // TODO: add errors rendering
   if (!bottleFile) return; // TODO: add errors rendering
 
@@ -26,6 +26,6 @@ export const submitFormRequest = async (mapPoint, worldUuid: string, bottleForm?
   if (submitResult.redirect_path) {
     window.location = submitResult.redirect_path;
   } else {
-    submitResult.errors.forEach((error: string) => console.log(error));
+    submitResult.errors.forEach((error) => console.log(error));
   }
 };

@@ -1,6 +1,6 @@
-import { apiRequest } from 'requests/helpers/apiRequest';
+import { apiRequest } from '../../../requests/helpers/apiRequest';
 
-export const bottleFormsRequest = async (worldUuid: string) => {
+export const bottleFormsRequest = async (worldUuid) => {
   const result = await apiRequest({
     url: `/worlds/${worldUuid}/bottle_forms.json`,
   });

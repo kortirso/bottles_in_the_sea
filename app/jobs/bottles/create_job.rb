@@ -2,12 +2,10 @@
 
 module Bottles
   class CreateJob < ApplicationJob
-    prepend RailsEventStore::AsyncHandler
-
     queue_as :default
 
-    def perform(event)
-      bottle = Bottle.find_by(uuid: event.data.fetch(:bottle_uuid))
+    def perform(uuid:)
+      bottle = Bottle.find_by(uuid: uuid)
       return unless bottle
 
       Achievement.award(:bottle_create, bottle)
