@@ -20,10 +20,10 @@ describe User do
     }
   end
 
-  describe 'roles?' do
-    context 'for regular role' do
-      let(:user) { create :user, role: 0 }
+  describe 'roles' do
+    let!(:user) { create :user, role: 0 }
 
+    context 'for regular role' do
       it 'returns true for regular matching' do
         expect(user.regular?).to be_truthy
       end
@@ -34,7 +34,7 @@ describe User do
     end
 
     context 'for admin role' do
-      let(:user) { create :user, role: 1 }
+      before { user.update!(role: 1) }
 
       it 'returns false for regular matching' do
         expect(user.regular?).to be_falsy
@@ -42,6 +42,24 @@ describe User do
 
       it 'returns true for admin matching' do
         expect(user.admin?).to be_truthy
+      end
+    end
+  end
+
+  describe 'confirmed?' do
+    let!(:user) { create :user }
+
+    context 'when is confirmed' do
+      it 'returns true' do
+        expect(user.confirmed?).to be_truthy
+      end
+    end
+
+    context 'when is not confirmed' do
+      before { user.update!(confirmed_at: nil) }
+
+      it 'returns false' do
+        expect(user.confirmed?).to be_falsy
       end
     end
   end
