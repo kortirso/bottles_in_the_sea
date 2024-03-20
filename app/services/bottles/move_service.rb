@@ -2,18 +2,17 @@
 
 module Bottles
   class MoveService
-    prepend ApplicationService
-
     FULL_POSSIBILITY = 100
 
     def call(bottle:)
-      @bottle = bottle
       return unless bottle.can_move?
 
-      flow_direction = select_flow_direction(bottle.cell.flows)
+      current_cell = bottle.cell
+      flow_direction = select_flow_direction(current_cell.flows)
       return if flow_direction.nil?
 
-      destination_cell = find_destination_cell(bottle.cell, flow_direction[0])
+      map_size = find_map_size(current_cell)
+      destination_cell = find_destination_cell(map_size, current_cell, flow_direction[0])
       update_bottle(bottle, destination_cell)
     end
 
@@ -28,27 +27,27 @@ module Bottles
       }
     end
 
-    def find_destination_cell(current_cell, flow_direction)
+    def find_destination_cell(map_size, current_cell, flow_direction)
       coordinates_change = Flows.cell_changes(
-        cell_type: @bottle.cell.world,
+        cell_type: current_cell.world,
         direction: flow_direction,
         column: current_cell.q
       )
-      q = find_new_q_coordinate(current_cell, coordinates_change)
-      q, r = find_new_r_coordinate(current_cell, coordinates_change, q)
+      q = find_new_q_coordinate(map_size, current_cell, coordinates_change)
+      q, r = find_new_r_coordinate(map_size, current_cell, coordinates_change, q)
 
       Cell.find_by(q: q, r: r)
     end
 
     def update_bottle(bottle, destination_cell)
+      # commento: bottles.cell_id, bottles.end_cell_id
       bottle.update!(
         cell: destination_cell,
-        end_cell: destination_cell.ground? ? destination_cell : nil,
-        fish_out_at_tick: destination_cell.ground? ? bottle.cell.world.ticks : nil
+        end_cell: destination_cell.ground? ? destination_cell : nil
       )
     end
 
-    def find_new_q_coordinate(current_cell, coordinates_change)
+    def find_new_q_coordinate(map_size, current_cell, coordinates_change)
       new_coordinate = current_cell[:q] + coordinates_change[:q]
       # -1 coordinate is equal maximum map size coordinate from another side of map
       return map_size[:q] if new_coordinate.negative?
@@ -58,23 +57,23 @@ module Bottles
       new_coordinate
     end
 
-    def find_new_r_coordinate(current_cell, coordinates_change, column)
+    def find_new_r_coordinate(map_size, current_cell, coordinates_change, column)
       new_coordinate = current_cell[:r] + coordinates_change[:r]
       # north pole coordinates changing
-      return [q_from_another_side(column), 0] if new_coordinate.negative?
+      return [q_from_another_side(map_size, column), 0] if new_coordinate.negative?
       # south pole coordinates changing
-      return [q_from_another_side(column), map_size[:r]] if new_coordinate > map_size[:r]
+      return [q_from_another_side(map_size, column), map_size[:r]] if new_coordinate > map_size[:r]
 
       [column, new_coordinate]
     end
 
     # for poles column change is half of full size
-    def q_from_another_side(column)
+    def q_from_another_side(map_size, column)
       column + (map_size[:q] / 2)
     end
 
-    def map_size
-      @map_size ||= @bottle.cell.world.map_size.with_indifferent_access
+    def find_map_size(current_cell)
+      current_cell.world.map_size.with_indifferent_access
     end
   end
 end

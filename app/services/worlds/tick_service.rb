@@ -2,46 +2,44 @@
 
 module Worlds
   class TickService
-    prepend ApplicationService
-
-    def initialize(
-      bottles_move_service: Bottles::MoveService.new,
-      searchers_activate_service: Searchers::ActivateService.new
-    )
-      @bottles_move_service = bottles_move_service
-      @searchers_activate_service = searchers_activate_service
-    end
+    include Deps[
+      move_service: 'services.bottles.move',
+      catch_service: 'services.bottles.catch'
+    ]
 
     def call(world_id:)
-      @world = World.find(world_id)
+      world = World.find_by(id: world_id)
+      return unless world
+
       ActiveRecord::Base.transaction do
-        update_world_tick
-        move_bottles
-        activate_searchers
+        update_tick(world)
+        move_bottles(world_id)
+        catch_bottles(world_id)
       end
-    rescue ::ActiveRecord::StaleObjectError => _e
-      Worlds::TickService.call(world_id: @world.id)
     end
 
     private
 
-    def update_world_tick
-      @world.update!(ticks: @world.ticks + 1)
+    def update_tick(world)
+      world.update!(ticks: world.ticks + 1)
     end
 
-    def move_bottles
+    def move_bottles(world_id)
       Bottle
         .moderated
+        .not_finished
         .joins(:cell)
-        .where(cells: { surface: Cell::WATER, world_id: @world.id })
-        .find_each { |bottle| @bottles_move_service.call(bottle: bottle) }
+        .where(cells: { surface: Cell::WATER, world_id: world_id })
+        .find_each { |bottle| move_service.call(bottle: bottle) }
     end
 
-    def activate_searchers
-      cells_with_bottles = @world.bottles.where.not(end_cell: nil).pluck(:end_cell_id)
-      Searcher
-        .where(cell_id: cells_with_bottles)
-        .find_each { |searcher| @searchers_activate_service.call(searcher: searcher) }
+    def catch_bottles(world_id)
+      Bottle
+        .finished
+        .available_for_catch
+        .joins(:cell)
+        .where(cells: { surface: Cell::GROUND, world_id: world_id })
+        .find_each { |bottle| catch_service.call(bottle: bottle) }
     end
   end
 end

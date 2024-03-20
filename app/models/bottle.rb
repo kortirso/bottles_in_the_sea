@@ -13,11 +13,18 @@ class Bottle < ApplicationRecord
   has_many_attached :files
 
   scope :moderated, -> { where.not(moderated_at: nil) }
+  scope :finished, -> { where.not(end_cell_id: nil) }
+  scope :not_finished, -> { where(end_cell_id: nil) }
+  scope :available_for_catch, -> { where(fish_out_user_id: nil) }
 
   enum form: { BORDEAUX => 0, BURGUNDY => 1 }
 
   def can_move?
-    cell.water?
+    cell.water? && end_cell_id.nil?
+  end
+
+  def can_be_catched?
+    cell.ground? && end_cell_id.present?
   end
 
   def moderated?

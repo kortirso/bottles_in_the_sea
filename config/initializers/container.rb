@@ -31,6 +31,9 @@ module BottlesInTheSea
     # services
     register('services.auth.fetch_session') { Auth::FetchSessionService.new }
     register('services.auth.generate_token') { Auth::GenerateTokenService.new }
+    register('services.bottles.move') { Bottles::MoveService.new }
+    register('services.bottles.catch') { Bottles::CatchService.new }
+    register('services.worlds.tick') { Worlds::TickService.new }
 
     # queries
     register('queries.cells') { CellsQuery.new }

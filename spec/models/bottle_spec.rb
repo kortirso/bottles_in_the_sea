@@ -30,4 +30,24 @@ describe Bottle do
       end
     end
   end
+
+  describe '.sailing_duration' do
+    let!(:world) { create :world, ticks: 123 }
+    let!(:cell) { create :cell, world: world }
+    let!(:bottle) { create :bottle, cell: cell, start_cell: cell }
+
+    context 'for not fished out bottle' do
+      it 'returns current ticks' do
+        expect(bottle.sailing_duration).to eq 123
+      end
+    end
+
+    context 'for fished out bottle' do
+      before { bottle.update!(fish_out_at_tick: 13) }
+
+      it 'returns sailing duration ticks' do
+        expect(bottle.sailing_duration).to eq 13
+      end
+    end
+  end
 end
