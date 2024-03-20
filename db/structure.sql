@@ -365,7 +365,6 @@ CREATE TABLE public.ar_internal_metadata (
 
 CREATE TABLE public.bottles (
     id bigint NOT NULL,
-    uuid uuid NOT NULL,
     user_id bigint,
     fish_out_user_id bigint,
     cell_id bigint,
@@ -405,7 +404,6 @@ ALTER SEQUENCE public.bottles_id_seq OWNED BY public.bottles.id;
 
 CREATE TABLE public.cells (
     id bigint NOT NULL,
-    uuid uuid NOT NULL,
     q integer DEFAULT 0 NOT NULL,
     r integer DEFAULT 0 NOT NULL,
     surface integer DEFAULT 0 NOT NULL,
@@ -645,7 +643,6 @@ CREATE TABLE public.schema_migrations (
 
 CREATE TABLE public.searchers (
     id bigint NOT NULL,
-    uuid uuid NOT NULL,
     name character varying NOT NULL,
     user_id bigint NOT NULL,
     cell_id bigint,
@@ -686,7 +683,8 @@ CREATE TABLE public.users (
     role integer DEFAULT 0 NOT NULL,
     confirmation_token character varying,
     confirmed_at timestamp(6) without time zone,
-    restore_token character varying
+    restore_token character varying,
+    username character varying
 );
 
 
@@ -747,7 +745,6 @@ ALTER SEQUENCE public.users_sessions_id_seq OWNED BY public.users_sessions.id;
 
 CREATE TABLE public.worlds (
     id bigint NOT NULL,
-    uuid uuid NOT NULL,
     ticks bigint DEFAULT 0 NOT NULL,
     name character varying NOT NULL,
     lock_version bigint,
@@ -1069,20 +1066,6 @@ CREATE INDEX index_bottles_on_user_id ON public.bottles USING btree (user_id);
 
 
 --
--- Name: index_bottles_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_bottles_on_uuid ON public.bottles USING btree (uuid);
-
-
---
--- Name: index_cells_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_cells_on_uuid ON public.cells USING btree (uuid);
-
-
---
 -- Name: index_emailbutler_messages_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1153,17 +1136,17 @@ CREATE INDEX index_searchers_on_user_id ON public.searchers USING btree (user_id
 
 
 --
--- Name: index_searchers_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_searchers_on_uuid ON public.searchers USING btree (uuid);
-
-
---
 -- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_users_on_email ON public.users USING btree (email);
+
+
+--
+-- Name: index_users_on_username; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_username ON public.users USING btree (username);
 
 
 --
@@ -1178,13 +1161,6 @@ CREATE UNIQUE INDEX index_users_sessions_on_user_id ON public.users_sessions USI
 --
 
 CREATE UNIQUE INDEX index_users_sessions_on_uuid ON public.users_sessions USING btree (uuid);
-
-
---
--- Name: index_worlds_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_worlds_on_uuid ON public.worlds USING btree (uuid);
 
 
 --
@@ -1283,6 +1259,7 @@ ALTER TABLE ONLY public.kudos_achievements
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240320090555'),
 ('20221225163729'),
 ('20221224184204'),
 ('20221218183900'),

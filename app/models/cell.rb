@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Cell < ApplicationRecord
-  include Uuidable
-
   WATER = 'water'
   GROUND = 'ground'
 

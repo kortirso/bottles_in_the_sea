@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Bottle < ApplicationRecord
-  include Uuidable
-
   BORDEAUX = 'bordeaux'
   BURGUNDY = 'burgundy'
 

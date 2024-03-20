@@ -4,8 +4,8 @@ module Bottles
   class CreateJob < ApplicationJob
     queue_as :default
 
-    def perform(uuid:)
-      bottle = Bottle.find_by(uuid: uuid)
+    def perform(id:)
+      bottle = Bottle.find_by(id: id)
       return unless bottle
 
       Achievement.award(:bottle_create, bottle)

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class World < ApplicationRecord
-  include Uuidable
-
   HEXAGON = 'hexagon'
   SQUARE = 'square'
 

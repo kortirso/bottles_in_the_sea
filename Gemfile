@@ -20,22 +20,14 @@ gem 'puma', '~> 6.0'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false
 
-# Js and css
-gem 'jsbundling-rails', '~> 1.0'
+# css
 gem 'sprockets-rails'
-gem 'tailwindcss-rails'
-
-# A framework for building view components
-gem 'view_component', '~> 3.0', require: 'view_component/engine'
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem 'bcrypt', '~> 3.1'
 
 # A ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT) standard
 gem 'jwt', '~> 2.5'
-
-# authorization
-gem 'action_policy', '~> 0.6'
 
 # dry-rb system
 gem 'dry-auto_inject', '~> 1.0'
@@ -81,9 +73,6 @@ end
 group :development do
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem 'rack-mini-profiler', '>= 2.3.3'
-
-  # email previews
-  gem 'letter_opener'
 end
 
 group :test do

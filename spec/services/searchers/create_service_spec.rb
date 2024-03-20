@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 describe Searchers::CreateService, type: :service do
-  subject(:service_call) { described_class.call(world_uuid: world_uuid, params: params, cell_params: cell_params) }
+  subject(:service_call) { described_class.call(world_id: world_id, params: params, cell_params: cell_params) }
 
   let!(:user) { create :user }
   let!(:world) { create :world }
 
-  let(:world_uuid) { world.uuid }
+  let(:world_id) { world.id }
   let(:params) { { user: user, name: 'Name' } }
   let(:cell_params) { { column: 0, row: 1 } }
 
@@ -16,7 +16,7 @@ describe Searchers::CreateService, type: :service do
   end
 
   context 'for unexisting world' do
-    let(:world_uuid) { 'unexisting' }
+    let(:world_id) { 'unexisting' }
 
     it 'does not create new searcher' do
       expect { service_call }.not_to change(Searcher, :count)

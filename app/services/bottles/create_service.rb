@@ -4,8 +4,8 @@ module Bottles
   class CreateService
     prepend ApplicationService
 
-    def call(world_uuid:, params:, cell_params:)
-      return if find_world(world_uuid) && failure?
+    def call(world_id:, params:, cell_params:)
+      return if find_world(world_id) && failure?
       return if find_cell(cell_params) && failure?
 
       @result = Bottle.create(
@@ -20,8 +20,8 @@ module Bottles
 
     private
 
-    def find_world(world_uuid)
-      @world = World.find_by(uuid: world_uuid)
+    def find_world(world_id)
+      @world = World.find_by(id: world_id)
       fail!('World is not found') unless @world
     end
 
@@ -31,7 +31,7 @@ module Bottles
     end
 
     def publish_created_bottle
-      Bottles::CreateJob.perform_later(uuid: @result.uuid)
+      Bottles::CreateJob.perform_later(id: @result.id)
     end
   end
 end

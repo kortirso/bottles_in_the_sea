@@ -12,35 +12,15 @@ Rails.application.routes.draw do
     end
   end
 
-  namespace :users do
-    get 'sign_up', to: 'registrations#new'
-    post 'sign_up', to: 'registrations#create'
-    get 'confirm', to: 'registrations#confirm', as: :confirm
-
-    get 'complete', to: 'confirmations#complete', as: :complete
-
-    get 'login', to: 'sessions#new'
-    post 'login', to: 'sessions#create'
-    get 'logout', to: 'sessions#destroy'
-
-    get 'restore', to: 'restore#new', as: :restore
-    post 'restore', to: 'restore#create'
-
-    get 'recovery', to: 'recovery#new', as: :recovery
-    post 'recovery', to: 'recovery#create'
+  namespace :api do
+    namespace :v1 do
+      resources :worlds, only: %i[] do
+        resources :bottle_forms, only: %i[index], module: 'worlds'
+      end
+      resources :bottles, only: %i[create]
+      resources :searchers, only: %i[create]
+    end
   end
-
-  namespace :profile do
-    resources :searchers, only: %i[index]
-    resources :bottles, only: %i[index]
-    resources :achievements, only: %i[index]
-  end
-
-  resources :worlds, only: %i[] do
-    resources :bottle_forms, only: %i[index], module: 'worlds'
-  end
-  resources :bottles, only: %i[create]
-  resources :searchers, only: %i[create]
 
   root 'welcome#index'
 end

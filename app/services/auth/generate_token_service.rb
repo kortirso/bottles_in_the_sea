@@ -2,13 +2,11 @@
 
 module Auth
   class GenerateTokenService
-    prepend ApplicationService
+    include Deps[jwt_encoder: 'jwt_encoder']
 
     def call(user:)
-      ActiveRecord::Base.transaction do
-        Users::Session.where(user: user).destroy_all
-        @result = JwtEncoder.encode(uuid: Users::Session.create!(user: user).uuid)
-      end
+      Users::Session.where(user: user).destroy_all
+      { result: jwt_encoder.encode(payload: { uuid: Users::Session.create!(user: user).uuid }) }
     end
   end
 end

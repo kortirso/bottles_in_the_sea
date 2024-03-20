@@ -15,7 +15,6 @@ require 'action_mailer/railtie'
 require 'action_view/railtie'
 # require 'action_cable/engine'
 require 'sprockets/railtie'
-require 'view_component'
 # require 'rails/test_unit/railtie'
 
 # Require the gems listed in Gemfile, including any gems
@@ -42,9 +41,6 @@ module BottlesInTheSea
 
     config.active_job.queue_adapter = :que
 
-    config.autoload_paths << Rails.root.join('app/views/components')
-    config.view_component.view_component_path = 'app/views/components'
-
     # Don't generate system test files.
     config.generators.system_tests = nil
     config.generators do |g|
@@ -55,6 +51,11 @@ module BottlesInTheSea
       g.javascripts false
       g.helper false
     end
+
+    # Please, add to the `ignore` list any other `lib` subdirectories that do
+    # not contain `.rb` files, or that should not be reloaded or eager loaded.
+    # Common ones are `templates`, `generators`, or `middleware`, for example.
+    config.autoload_lib(ignore: %w[assets tasks])
 
     # Catch 404s
     config.after_initialize do |app|
