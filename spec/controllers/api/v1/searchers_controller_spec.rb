@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-describe Api::V1::BottlesController do
+describe Api::V1::SearchersController do
   describe 'POST#create' do
-    let!(:cell) { create :cell }
+    let!(:cell) { create :cell, :ground }
 
     it_behaves_like 'required api auth'
 
@@ -13,14 +13,31 @@ describe Api::V1::BottlesController do
       context 'for not existing cell' do
         let(:request) {
           post :create, params: {
-            bottle: { form: Bottle::BORDEAUX },
+            searcher: { name: 'First' },
             cell: { column: cell.q, row: cell.r, world_id: 'unexisting' },
             api_access_token: access_token
           }
         }
 
-        it 'does not create new bottle', :aggregate_failures do
-          expect { request }.not_to change(Bottle, :count)
+        it 'does not create new searcher', :aggregate_failures do
+          expect { request }.not_to change(Searcher, :count)
+          expect(response).to have_http_status :unprocessable_entity
+        end
+      end
+
+      context 'for existing cell and existing searcher' do
+        let(:request) {
+          post :create, params: {
+            searcher: { name: 'First' },
+            cell: { column: cell.q, row: cell.r, world_id: cell.world_id },
+            api_access_token: access_token
+          }
+        }
+
+        before { create :searcher, user: user }
+
+        it 'does not create new searcher', :aggregate_failures do
+          expect { request }.not_to change(Searcher, :count)
           expect(response).to have_http_status :unprocessable_entity
         end
       end
@@ -28,15 +45,14 @@ describe Api::V1::BottlesController do
       context 'for existing cell' do
         let(:request) {
           post :create, params: {
-            bottle: { form: Bottle::BORDEAUX },
+            searcher: { name: 'First' },
             cell: { column: cell.q, row: cell.r, world_id: cell.world_id },
             api_access_token: access_token
           }
         }
 
-        it 'creates new bottle', :aggregate_failures do
-          expect { request }.to change(Bottle, :count)
-          expect(Bottle.last.created_at_tick).to eq cell.world.ticks
+        it 'creates new searcher', :aggregate_failures do
+          expect { request }.to change(Searcher, :count)
           expect(response).to have_http_status :created
         end
       end
@@ -44,7 +60,7 @@ describe Api::V1::BottlesController do
 
     def do_request
       post :create, params: {
-        bottle: { form: Bottle::BORDEAUX },
+        searcher: { name: 'First' },
         cell: { column: cell.q, row: cell.r, world_id: 'unexisting' }
       }
     end

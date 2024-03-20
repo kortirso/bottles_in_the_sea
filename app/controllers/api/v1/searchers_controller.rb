@@ -3,16 +3,19 @@
 module Api
   module V1
     class SearchersController < Api::V1Controller
+      include Deps[create_form: 'forms.searchers.create']
+
+      SERIALIZER_FIELDS = %w[id name].freeze
+
       def create
-        service_call = Searchers::CreateService.call(
-          world_id: params[:world_id],
-          params: searcher_params.merge(user: Current.user),
-          cell_params: cell_params
-        )
-        if service_call.success?
-          render json: { redirect_path: root_path }, status: :created
-        else
-          render json: { errors: service_call.errors }, status: :unprocessable_entity
+        case create_form.call(params: searcher_params.merge(user: Current.user), cell_params: cell_params)
+        in { errors: errors } then render json: { errors: errors }, status: :unprocessable_entity
+        in { result: result }
+          render json: {
+            searcher: SearcherSerializer.new(
+              result, params: serializer_fields(SearcherSerializer, SERIALIZER_FIELDS)
+            ).serializable_hash
+          }, status: :created
         end
       end
 
@@ -23,7 +26,7 @@ module Api
       end
 
       def cell_params
-        params.require(:cell).permit(:column, :row)
+        params.require(:cell).permit(:column, :row, :world_id)
       end
     end
   end

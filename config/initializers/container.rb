@@ -26,6 +26,7 @@ module BottlesInTheSea
     # forms
     register('forms.users.create') { Users::CreateForm.new }
     register('forms.bottles.create') { Bottles::CreateForm.new }
+    register('forms.searchers.create') { Searchers::CreateForm.new }
 
     # services
     register('services.auth.fetch_session') { Auth::FetchSessionService.new }

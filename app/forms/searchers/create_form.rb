@@ -1,35 +1,29 @@
 # frozen_string_literal: true
 
-module Bottles
+module Searchers
   class CreateForm
     def call(params:, cell_params:)
       cell = find_cell(cell_params)
       return { errors: ['Cell is not found'] } unless cell
 
-      result = Bottle.create!(
-        params.merge(
-          created_at_tick: cell.world.ticks,
-          cell: cell,
-          start_cell: cell
-        )
-      )
-      publish_created_bottle(result)
+      error = validate_searchers_amount(params[:user])
+      return { errors: [error] } if error
 
-      { result: result }
+      { result: Searcher.create!(params.merge(cell: cell)) }
     end
 
     private
 
     def find_cell(cell_params)
-      Cell.water.find_by(
+      Cell.ground.find_by(
         q: cell_params[:column].to_i,
         r: cell_params[:row].to_i,
         world_id: cell_params[:world_id]
       )
     end
 
-    def publish_created_bottle(result)
-      Bottles::CreateJob.perform_later(id: result.id)
+    def validate_searchers_amount(user)
+      'Too many searchers' if user.searchers.count.positive?
     end
   end
 end
