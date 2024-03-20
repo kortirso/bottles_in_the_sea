@@ -10,6 +10,12 @@ module Localization
   private
 
   def set_locale
-    I18n.locale = params[:locale]
+    locale = params[:locale]&.to_sym
+    I18n.locale =
+      if I18n.available_locales.include?(locale)
+        locale
+      else
+        I18n.default_locale
+      end
   end
 end

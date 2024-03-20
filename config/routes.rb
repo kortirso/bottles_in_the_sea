@@ -12,15 +12,22 @@ Rails.application.routes.draw do
     end
   end
 
-  namespace :api do
-    namespace :v1 do
-      resources :worlds, only: %i[] do
-        resources :bottle_forms, only: %i[index], module: 'worlds'
+  scope '(:locale)', locale: /#{I18n.available_locales.join('|')}/, defaults: { locale: nil } do
+    namespace :api do
+      namespace :v1 do
+        namespace :users do
+          resources :me, only: %i[index]
+          resource :access_tokens, only: %i[create]
+        end
+        resources :users, only: %i[create]
+        resources :worlds, only: %i[] do
+          resources :bottle_forms, only: %i[index], module: 'worlds'
+        end
+        resources :bottles, only: %i[create]
+        resources :searchers, only: %i[create]
       end
-      resources :bottles, only: %i[create]
-      resources :searchers, only: %i[create]
     end
-  end
 
-  root 'welcome#index'
+    root 'welcome#index'
+  end
 end
