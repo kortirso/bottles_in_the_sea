@@ -7,7 +7,7 @@ describe Api::V1::UsersController do
 
       it 'does not create user', :aggregate_failures do
         expect { request }.not_to change(User, :count)
-        expect(response).to have_http_status :bad_request
+        expect(response).to have_http_status :unprocessable_entity
       end
     end
 
@@ -16,7 +16,7 @@ describe Api::V1::UsersController do
 
       it 'does not create new user', :aggregate_failures do
         expect { request }.not_to change(User, :count)
-        expect(response).to have_http_status :bad_request
+        expect(response).to have_http_status :unprocessable_entity
       end
     end
 
@@ -25,7 +25,7 @@ describe Api::V1::UsersController do
 
       it 'does not create new user', :aggregate_failures do
         expect { request }.not_to change(User, :count)
-        expect(response).to have_http_status :bad_request
+        expect(response).to have_http_status :unprocessable_entity
       end
     end
 
@@ -39,7 +39,7 @@ describe Api::V1::UsersController do
 
       it 'does not create new user', :aggregate_failures do
         expect { request }.not_to change(User, :count)
-        expect(response).to have_http_status :bad_request
+        expect(response).to have_http_status :unprocessable_entity
       end
     end
 

@@ -11,7 +11,7 @@ module Api
 
       def create
         case create_form.call(params: user_params.to_h.symbolize_keys)
-        in { errors: errors } then render json: { errors: errors }, status: :bad_request
+        in { errors: errors } then render json: { errors: errors }, status: :unprocessable_entity
         in { result: result }
           render json: {
             user: UserSerializer.new(

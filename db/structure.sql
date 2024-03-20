@@ -746,12 +746,12 @@ ALTER SEQUENCE public.users_sessions_id_seq OWNED BY public.users_sessions.id;
 CREATE TABLE public.worlds (
     id bigint NOT NULL,
     ticks bigint DEFAULT 0 NOT NULL,
-    name character varying NOT NULL,
     lock_version bigint,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     cell_type integer DEFAULT 0 NOT NULL,
-    map_size jsonb DEFAULT '{}'::jsonb NOT NULL
+    map_size jsonb DEFAULT '{}'::jsonb NOT NULL,
+    name jsonb DEFAULT '{}'::jsonb NOT NULL
 );
 
 
@@ -1259,6 +1259,7 @@ ALTER TABLE ONLY public.kudos_achievements
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240320105113'),
 ('20240320090555'),
 ('20221225163729'),
 ('20221224184204'),

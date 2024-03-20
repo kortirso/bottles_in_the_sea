@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :world do
-    name { 'Forgotten Realms' }
+    name { { en: 'Forgotten Realms', ru: 'Забытые Королевства' } }
   end
 end

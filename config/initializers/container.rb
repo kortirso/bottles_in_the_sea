@@ -25,10 +25,14 @@ module BottlesInTheSea
 
     # forms
     register('forms.users.create') { Users::CreateForm.new }
+    register('forms.bottles.create') { Bottles::CreateForm.new }
 
     # services
     register('services.auth.fetch_session') { Auth::FetchSessionService.new }
     register('services.auth.generate_token') { Auth::GenerateTokenService.new }
+
+    # queries
+    register('queries.cells') { CellsQuery.new }
   end
 end
 

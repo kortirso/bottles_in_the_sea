@@ -20,9 +20,8 @@ Rails.application.routes.draw do
           resource :access_tokens, only: %i[create]
         end
         resources :users, only: %i[create]
-        resources :worlds, only: %i[] do
-          resources :bottle_forms, only: %i[index], module: 'worlds'
-        end
+        resources :worlds, only: %i[index]
+        resources :cells, only: %i[index]
         resources :bottles, only: %i[create]
         resources :searchers, only: %i[create]
       end
