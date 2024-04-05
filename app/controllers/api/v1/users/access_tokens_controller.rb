@@ -22,13 +22,13 @@ module Api
         private
 
         def find_user
-          @user = User.find_by!(username: user_params[:username]&.strip&.downcase)
+          @user = User.find_by!(username: user_params[:username])
         end
 
         def authenticate_user
           return if @user.authenticate(user_params[:password])
 
-          render json: { errors: [t('controllers.users.sessions.invalid')] }, status: :bad_request
+          render json: { errors: [t('controllers.users.sessions.invalid')] }, status: :unprocessable_entity
         end
 
         def user_params

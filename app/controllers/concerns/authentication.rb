@@ -9,6 +9,8 @@ module Authentication
 
   private
 
+  def current_user; end
+
   def authenticate
     return if Current.user
 

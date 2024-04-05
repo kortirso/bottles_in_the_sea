@@ -24,9 +24,7 @@ module Api
       private
 
       def user_params
-        params_hash = params.require(:user).permit(:username, :password, :password_confirmation)
-        params_hash[:username] = params_hash[:username].strip.downcase
-        params_hash
+        params.require(:user).permit(:username, :password, :password_confirmation)
       end
     end
   end

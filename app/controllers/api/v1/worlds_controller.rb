@@ -3,6 +3,7 @@
 module Api
   module V1
     class WorldsController < Api::V1Controller
+      skip_before_action :authenticate
       before_action :find_worlds, only: %i[index]
 
       SERIALIZER_FIELDS = %w[id ticks map_size name].freeze

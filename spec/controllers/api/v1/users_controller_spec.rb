@@ -44,12 +44,12 @@ describe Api::V1::UsersController do
     end
 
     context 'for valid data' do
-      let(:user_params) { { username: ' useR@gmail.com ', password: '12345678', password_confirmation: '12345678' } }
+      let(:user_params) { { username: 'username', password: '12345678', password_confirmation: '12345678' } }
       let(:request) { post :create, params: { user: user_params } }
 
       it 'creates new user', :aggregate_failures do
         expect { request }.to change(User, :count).by(1)
-        expect(User.last.username).to eq 'user@gmail.com'
+        expect(User.last.username).to eq 'username'
         expect(response).to have_http_status :created
         expect(response.parsed_body.dig('user', 'data', 'attributes', 'access_token')).not_to be_blank
       end

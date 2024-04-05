@@ -410,7 +410,8 @@ CREATE TABLE public.cells (
     flows jsonb DEFAULT '{"0": 100}'::jsonb NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
-    world_id bigint NOT NULL
+    world_id bigint NOT NULL,
+    name jsonb DEFAULT '{}'::jsonb NOT NULL
 );
 
 
@@ -676,7 +677,7 @@ ALTER SEQUENCE public.searchers_id_seq OWNED BY public.searchers.id;
 
 CREATE TABLE public.users (
     id bigint NOT NULL,
-    email character varying DEFAULT ''::character varying NOT NULL,
+    email character varying DEFAULT ''::character varying,
     password_digest character varying DEFAULT ''::character varying NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
@@ -1259,6 +1260,8 @@ ALTER TABLE ONLY public.kudos_achievements
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20240405112025'),
+('20240405103144'),
 ('20240320105113'),
 ('20240320090555'),
 ('20221225163729'),

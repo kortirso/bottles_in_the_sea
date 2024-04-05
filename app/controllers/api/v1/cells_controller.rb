@@ -5,9 +5,10 @@ module Api
     class CellsController < Api::V1Controller
       include Deps[cells_query: 'queries.cells']
 
+      skip_before_action :authenticate
       before_action :find_cells, only: %i[index]
 
-      SERIALIZER_FIELDS = %w[id q r surface].freeze
+      SERIALIZER_FIELDS = %w[id q r surface name].freeze
 
       def index
         render json: {

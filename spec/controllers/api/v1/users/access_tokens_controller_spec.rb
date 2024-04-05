@@ -18,7 +18,7 @@ describe Api::V1::Users::AccessTokensController do
         it 'returns error', :aggregate_failures do
           post :create, params: { user: { username: user.username, password: 'invalid_password' } }
 
-          expect(response).to have_http_status :bad_request
+          expect(response).to have_http_status :unprocessable_entity
           expect(response.parsed_body.dig('user', 'data', 'attributes', 'access_token')).to be_blank
         end
       end
@@ -27,7 +27,7 @@ describe Api::V1::Users::AccessTokensController do
         it 'returns error', :aggregate_failures do
           post :create, params: { user: { username: user.username, password: '' } }
 
-          expect(response).to have_http_status :bad_request
+          expect(response).to have_http_status :unprocessable_entity
           expect(response.parsed_body.dig('user', 'data', 'attributes', 'access_token')).to be_blank
         end
       end
@@ -45,8 +45,8 @@ describe Api::V1::Users::AccessTokensController do
         it 'returns access token', :aggregate_failures do
           post :create, params: { user: { username: user.username.upcase, password: user.password } }
 
-          expect(response).to have_http_status :created
-          expect(response.parsed_body.dig('user', 'data', 'attributes', 'access_token')).not_to be_blank
+          expect(response).to have_http_status :not_found
+          expect(response.parsed_body.dig('user', 'data', 'attributes', 'access_token')).to be_blank
         end
       end
     end
